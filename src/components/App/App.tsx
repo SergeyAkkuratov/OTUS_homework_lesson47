@@ -25,7 +25,7 @@ export default function App() {
                         <Route path="user" element={<User />} />
                     ) : (
                         <>
-                            <Route path="singin" element={<SingIn />} />
+                            <Route path="signin" element={<SingIn />} />
                             <Route path="signup" element={<SingUp />} />
                         </>
                     )}

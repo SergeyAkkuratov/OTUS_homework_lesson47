@@ -9,13 +9,19 @@ export enum AuthStatus {
     DONE = "DONE",
 }
 
+export interface Category {
+    id: string;
+    name: string;
+    parent: string | null;
+}
+
 export interface Outlay {
     id: string;
-    date: string;
-    comment: string;
-    sum: number;
     type: OutlayType;
+    date: string;
+    sum: number;
     category: string;
+    comment: string;
 }
 
 export interface UserState {

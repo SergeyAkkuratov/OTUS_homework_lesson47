@@ -40,18 +40,19 @@ export default function SingUp() {
             <form onSubmit={(event) => submit(event)}>
                 <fieldset>
                     <div>
-                        <label htmlFor="loginInput" className="form-label mt-4">Login</label>
+                        <label htmlFor="loginInput" className="form-label mt-1">Login</label>
                         <input type="text" className="form-control" id="loginInput" aria-describedby="loginHelp" placeholder="Enter login" />
                     </div>
                     <div>
-                        <label htmlFor="emailInput" className="form-label mt-4">Email</label>
+                        <label htmlFor="emailInput" className="form-label mt-1">Email</label>
                         <input type="email" className="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email" />
                     </div>
                     <div>
-                        <label htmlFor="exampleInputPassword1" className="form-label mt-4">Password</label>
+                        <label htmlFor="exampleInputPassword1" className="form-label mt-1">Password</label>
                         <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" autoComplete="off" />
                     </div>
-                    <button type="submit" className="btn btn-primary">Sign up</button>
+                    <button type="button" className="btn btn-secondary me-sm-2 mt-2" onClick={() => {navigate("/signin")}}>Sign in</button>
+                    <button type="submit" className="btn btn-primary mt-2">Sign up</button>
                 </fieldset>
             </form>
         </>

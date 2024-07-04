@@ -73,16 +73,18 @@ export const userSlice = createSlice({
     reducers: {
         startAuth: (state) => { state.status = AuthStatus.IN_PROGRESS },
         successAuth: (state, action: PayloadAction<UserState>) => {
-            state.status = action.payload.status;
-            state.login = action.payload.login;
-            state.email = action.payload.email;
+            return action.payload;
         },
         failureAuth: (state) => {
             console.error("Auth error");
             state.status = AuthStatus.NOT_DONE;
         },
         signOut: (state) => {
-
+            return {
+                status: AuthStatus.NOT_DONE,
+                login: null,
+                email: null
+            };
         }
     },
     selectors: {
@@ -94,13 +96,10 @@ export const outlaysSlice = createSlice({
     name: "Outlays",
     initialState: initialTasksStateTest,
     reducers: {
-        taskChange: (state, action: PayloadAction<Outlay>) => {
-            state.outlays[state.outlays.findIndex(outlay => outlay.id === action.payload.id)] = action.payload;
-        },
-        taskCreate: (state, action: PayloadAction<Outlay>) => {
+        outlayCreate: (state, action: PayloadAction<Outlay>) => {
             state.outlays.push(action.payload);
         },
-        taskDelete: (state, action: PayloadAction<string>) => {
+        outlayDelete: (state, action: PayloadAction<string>) => {
             state.outlays.splice(state.outlays.findIndex(outlay => outlay.id === action.payload), 1);
         },
         connect: (state) => { state.connected = true },
@@ -110,7 +109,7 @@ export const outlaysSlice = createSlice({
         lastWeekOutlays: (state) => {
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
-            return state.outlays.filter(outlay => new Date(outlay.date) > weekAgo);
+            return state.outlays.filter(outlay => new Date(outlay.date) > weekAgo).sort((a,b) => Date.parse(b.date) - Date.parse(a.date));
         }
     }
 })

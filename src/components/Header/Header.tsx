@@ -29,7 +29,7 @@ export default function Header() {
 									</>
 								) : (
 									<>
-										<Link className="nav-link" to='/singin'>SingIn</Link>
+										<Link className="nav-link" to='/signin'>SingIn</Link>
 									</>
 								)}
 							</li>

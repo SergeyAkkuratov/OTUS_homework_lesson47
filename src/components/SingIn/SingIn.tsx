@@ -39,15 +39,15 @@ export default function SingIn() {
             <form onSubmit={(event) => submit(event)}>
                 <fieldset>
                     <div>
-                        <label htmlFor="loginInput" className="form-label mt-4">Login</label>
-                        <input type="text" className="form-control" id="loginInput" aria-describedby="loginHelp" placeholder="Enter login" />
+                        <label htmlFor="login" className="form-label mt-1">Login</label>
+                        <input type="text" className="form-control" id="login" aria-describedby="loginHelp" placeholder="Enter login" onChange={handleChange}/>
                     </div>
-                    <div>
-                        <label htmlFor="exampleInputPassword1" className="form-label mt-4">Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" autoComplete="off" />
+                    <div className="mb3">
+                        <label htmlFor="password" className="form-label mt-1">Password</label>
+                        <input type="password" className="form-control" id="password" placeholder="Password" autoComplete="off" onChange={handleChange}/>
                     </div>
-                    <button type="submit" className="btn btn-primary">Sign in</button>
-                    <button type="button" className="btn btn-secondary" onClick={() => {navigate("/signup")}}>Sign up</button>
+                    <button type="submit" className="btn btn-primary mt-2 me-sm-2">Sign in</button>
+                    <button type="button" className="btn btn-secondary mt-2" onClick={() => {navigate("/signup")}}>Sign up</button>
                 </fieldset>
             </form>
         </>

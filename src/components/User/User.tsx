@@ -1,7 +1,6 @@
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../App/hooks";
 import { useNavigate } from "react-router-dom";
-import { userSlice } from "../../store/Store";
+import { useAppDispatch, useAppSelector, userSlice } from "../../store/Store";
 
 export function User() {
     const userState = useAppSelector((state) => state.User);

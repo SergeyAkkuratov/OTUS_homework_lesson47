@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { OutlayType } from "../../store/Store.types";
 import { getCategories } from "../../firebase/firebaseAPI";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../App/hooks";
-import { outlaysSlice } from "../../store/Store";
+import { outlaysSlice, useAppDispatch } from "../../store/Store";
 
 
 

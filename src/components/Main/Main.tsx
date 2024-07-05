@@ -1,6 +1,5 @@
 import React from "react";
-import { useAppSelector } from "../App/hooks";
-import { userSlice } from "../../store/Store";
+import { useAppSelector, userSlice } from "../../store/Store";
 import { Link } from "react-router-dom";
 import OutlayTable from "../OutlayTable/OutlayTable";
 import AddOutlay from "../AddOutlay/AddOutlay";

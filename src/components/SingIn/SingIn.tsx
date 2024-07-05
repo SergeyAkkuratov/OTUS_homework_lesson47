@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../App/hooks";
-import { userSlice } from "../../store/Store";
+import { useAppDispatch, userSlice } from "../../store/Store";
 import { signIn } from "../../firebase/firebaseAPI";
 import { AuthStatus } from "../../store/Store.types";
 import { Navigate, useNavigate } from "react-router-dom";

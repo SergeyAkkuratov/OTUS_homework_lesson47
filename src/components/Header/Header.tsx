@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../App/hooks";
-import { userSlice } from "../../store/Store";
+import { useAppSelector, userSlice } from "../../store/Store";
 
 export default function Header() {
 	const isAuth = useAppSelector(userSlice.selectors.isAuth);

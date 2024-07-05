@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootswatch/dist/darkly/bootstrap.min.css";
 import { User } from "../User/User";
-import SingUp from "../SingUp/SingUp";
 import Main from "../Main/Main";
 import { useAppSelector, userSlice } from "../../store/Store";
 const About = React.lazy(() => import("../About/About"));
@@ -24,7 +23,6 @@ export default function App() {
                     ) : (
                         <>
                             <Route path="signin" element={<SingIn />} />
-                            <Route path="signup" element={<SingUp />} />
                         </>
                     )}
                 </Routes>

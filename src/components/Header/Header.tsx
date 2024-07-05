@@ -4,7 +4,7 @@ import { useAppSelector, userSlice } from "../../store/Store";
 
 export default function Header() {
 	const isAuth = useAppSelector(userSlice.selectors.isAuth);
-	const userLogin = useAppSelector((state) => state.User.login);
+	const userEmail = useAppSelector((state) => state.User.email);
 	return (
 		<>
 			<nav className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -24,7 +24,7 @@ export default function Header() {
 							<li className="nav-item">
 								{isAuth ? (
 									<>
-										<Link className="nav-link" to='/user'><span className="badge bg-success">{userLogin}</span></Link>
+										<Link className="nav-link" to='/user'><span className="badge bg-success">{userEmail}</span></Link>
 									</>
 								) : (
 									<>

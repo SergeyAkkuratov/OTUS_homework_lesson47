@@ -1,10 +1,24 @@
 import { Category } from "../store/Store.types";
+import { FirebaseError, initializeApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential, User, AuthError } from "firebase/auth";
 
-export interface AuthReponse {
-    login: string;
-    email: string;
-}
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDeBQawIwktWT0nwvRuizl8Fq-uqdxUS9M",
+    authDomain: "outlays-fa282.firebaseapp.com",
+    databaseURL: "https://outlays-fa282-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "outlays-fa282",
+    storageBucket: "outlays-fa282.appspot.com",
+    messagingSenderId: "141496007785",
+    appId: "1:141496007785:web:2ce0d5a5af8b9cf1e6b6f8"
+};
 
+// Initialize Firebase
+initializeApp(firebaseConfig);
+
+export const firebaseAuth = getAuth();
+
+// Mocks
 const testCategories: Category[] = [
     {
         id: "1",
@@ -37,18 +51,6 @@ const testCategories: Category[] = [
         parent: "5"
     },
 ];
-
-export async function signIn(loggin: string, password: string, error: boolean = false): Promise<AuthReponse> {
-    return new Promise<AuthReponse>((resolve, reject) => {
-        error ? reject("New error") : resolve({login: "TEST", email: "test@mail.com"});
-    });
-}
-
-export async function signUp(loggin: string, email: string, password: string, error: boolean = false): Promise<AuthReponse> {
-    return new Promise<AuthReponse>((resolve, reject) => {
-        error ? reject("New error") : resolve({login: "TEST", email: "test@mail.com"});
-    });
-}
 
 export function getCategories(): Category[] {
     return testCategories;

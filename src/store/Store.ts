@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 //TODO: для тестовых нужд, убрать перед деплоем
 const initialUserStateSingIn: UserState = {
     status: AuthStatus.DONE,
-    login: "TestUserLogin",
     email: "test.user@gmail.com"
 }
 
@@ -58,7 +57,6 @@ const initialTasksStateTest: OutlaysState = {
 
 const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,
-    login: null,
     email: null
 }
 
@@ -83,7 +81,6 @@ export const userSlice = createSlice({
         signOut: (state) => {
             return {
                 status: AuthStatus.NOT_DONE,
-                login: null,
                 email: null
             };
         }

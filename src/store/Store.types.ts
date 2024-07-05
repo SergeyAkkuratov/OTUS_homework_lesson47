@@ -26,7 +26,6 @@ export interface Outlay {
 
 export interface UserState {
     status: AuthStatus;
-    login: string | null;
     email: string | null;
 }
 

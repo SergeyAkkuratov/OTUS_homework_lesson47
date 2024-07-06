@@ -1,7 +1,7 @@
 import React from "react";
-import { useAppSelector, userSlice } from "../../store/Store";
+import { outlaysSlice, useAppSelector, userSlice } from "../../store/Store";
 import { Link } from "react-router-dom";
-import OutlayTable from "./OutlayTable/OutlayTable";
+import OutlayTable from "../OutlayTable/OutlayTable";
 import AddOutlay from "./AddOutlay/AddOutlay";
 
 export default function () {
@@ -22,7 +22,7 @@ export default function () {
     return (
         <>
             <AddOutlay />
-            <OutlayTable />
+            <OutlayTable filter="lastWeek"/>
         </>
     );
 }

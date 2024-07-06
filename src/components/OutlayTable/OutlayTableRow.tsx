@@ -1,7 +1,7 @@
 import React from "react";
-import { Outlay, OutlayType } from "../../../store/Store.types";
+import { Outlay, OutlayType } from "../../store/Store.types";
 import { child, set } from "firebase/database";
-import { categoriesSlice, store, useAppSelector } from "../../../store/Store";
+import { categoriesSlice, store, useAppSelector } from "../../store/Store";
 
 export type OutlayTableRowProps = {
     data: Outlay;

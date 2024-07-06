@@ -1,9 +1,14 @@
 import React from "react";
-import { outlaysSlice, useAppSelector } from "../../../store/Store";
+import { outlaysSlice, useAppSelector } from "../../store/Store";
 import OutlayTableRow from "./OutlayTableRow";
 
-export default function OutlayTable() {
-    const outlays = useAppSelector(outlaysSlice.selectors.lastWeekOutlays);
+export type OutlayTableProps = {
+    filter: string;
+    params?: {};
+}
+
+export default function OutlayTable(props: OutlayTableProps) {
+    const outlays = useAppSelector((state) => outlaysSlice.selectors.filterOutlays(state, props.filter, props.params));
     return (
         <>
             <table className="table table-hover" data-bs-spy="scroll">

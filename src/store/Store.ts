@@ -100,24 +100,36 @@ export const outlaysSlice = createSlice({
     },
     selectors: {
         dbReference: (state) => { return state.dbReference },
-        lastWeekOutlays: (state) => {
-            const weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            return Object.keys(state.outlays).map((key) => state.outlays[key])
-                .filter(outlay => new Date(outlay.date) > weekAgo)
-                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+        filterOutlays: (state, filter: string, params?: any) => {
+            switch (filter) {
+                case "lastMonth": {
+                    const monthAgo = new Date();
+                    monthAgo.setDate(monthAgo.getMonth() - 1);
+                    return Object.keys(state.outlays).map((key) => state.outlays[key])
+                        .filter(outlay => new Date(outlay.date) > monthAgo)
+                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+                }
+                case "betweenTwoDates": {
+                    return Object.keys(state.outlays).map((key) => state.outlays[key])
+                        .filter(outlay => new Date(outlay.date) >= new Date(params.startDate) && new Date(outlay.date) <= new Date(params.endDate))
+                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+                }
+                case "lastWeek":
+                default: {
+                    const weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    return Object.keys(state.outlays).map((key) => state.outlays[key])
+                        .filter(outlay => new Date(outlay.date) > weekAgo)
+                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+                }
+            }
         },
-        lastMonthOutlays: (state) => {
-            const monthAgo = new Date();
-            monthAgo.setDate(monthAgo.getMonth() - 1);
-            return Object.keys(state.outlays).map((key) => state.outlays[key])
-                .filter(outlay => new Date(outlay.date) > monthAgo)
-                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-        },
-        betweenTwoDates: (state, startDate: Date, endDate: Date) => {
-            return Object.keys(state.outlays).map((key) => state.outlays[key])
-                .filter(outlay => new Date(outlay.date) >= startDate && new Date(outlay.date) <= endDate)
-                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+        getAllFilters: (state) => {
+            return [
+                { title: "Last Week", filterName: "lastWeek" },
+                { title: "Last Month", filterName: "lastMonth" },
+                { title: "Between Two date", filterName: "betweenTwoDates" }
+            ];
         }
     }
 })
@@ -146,7 +158,7 @@ export const categoriesSlice = createSlice({
         },
         highestCategoryName: (state, id: string) => {
             let category = state.categories[id];
-            while(category.parent) {
+            while (category.parent) {
                 category = state.categories[category.parent];
             }
             return category.name;

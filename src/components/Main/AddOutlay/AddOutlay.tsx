@@ -42,7 +42,7 @@ export default function AddOutlay() {
                     </div>
                     <div>
                         <label htmlFor="date" className="form-label mt-1">Date</label>
-                        <input type="datetime-local" className="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter email" value={formData.date} onChange={handleChange} />
+                        <input type="datetime-local" className="form-control" id="date" value={formData.date} onChange={handleChange} />
                     </div>
                     <div>
                         <label htmlFor="sum" className="form-label mt-1">Sum</label>

@@ -6,11 +6,10 @@ import { useSearchParams } from "react-router-dom";
 import OutlayTable from "../OutlayTable/OutlayTable";
 
 export default function Statistic() {
-    const [searchParams, setSearchParams] = useSearchParams();
     const defaultFilters = useAppSelector(outlaysSlice.selectors.getAllFilters)
+    const [searchParams, setSearchParams] = useSearchParams();
     const [currentFilter, setCurrentFilter] = useState({
-        ...defaultFilters[0],
-        params: {}
+        ...defaultFilters[0]
     });
     const [datesParams, setDatesParams] = useState({
         startDate: "",
@@ -19,7 +18,7 @@ export default function Statistic() {
 
     function getData() {
         const result: { [id: string]: number } = {};
-        outlaysSlice.selectors.filterOutlays(store.getState(), currentFilter.filterName, currentFilter.params).forEach((outLay) => {
+        outlaysSlice.selectors.filterOutlays(store.getState(), currentFilter.filterName, datesParams).forEach((outLay) => {
             if (outLay.type === OutlayType.OUTLAY) {
                 const sum = outLay.sum;
                 const category = categoriesSlice.selectors.highestCategoryName(store.getState(), outLay.category);
@@ -44,22 +43,10 @@ export default function Statistic() {
 
     const handleRadioButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value, innerHTML } = event.target;
-        if(value === "betweenTwoDates") {
-            setCurrentFilter({
-                filterName: value,
-                title: innerHTML,
-                params: {
-                    startDate: "",
-                    endDate: ""
-                }
-            });
-        } else {
-            setCurrentFilter({
-                filterName: value,
-                title: innerHTML,
-                params: {}
-            });
-        }
+        setCurrentFilter({
+            filterName: value,
+            title: innerHTML,
+        });
         setSearchParams(params => {
             params.set("filter", JSON.stringify(currentFilter));
             return params;
@@ -72,14 +59,8 @@ export default function Statistic() {
             ...prevState,
             [id]: value
         }))
-        setCurrentFilter((prevState) => ({
-            ...prevState,
-            params: {
-                ...datesParams
-            }
-        }));
         setSearchParams(params => {
-            params.set("filter", JSON.stringify(currentFilter));
+            params.set(id, value);
             return params;
         });
     }
@@ -111,7 +92,7 @@ export default function Statistic() {
                 </>) : (<></>)}
             </fieldset>
             {searchParams.get("isChart") === "true" ? (
-                <OutlayTable filter={currentFilter.filterName} params={currentFilter.params} />
+                <OutlayTable filter={currentFilter.filterName} params={datesParams} />
             ) : (
                 <Chart
                     chartType="PieChart"

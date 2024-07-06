@@ -104,7 +104,7 @@ export const outlaysSlice = createSlice({
             switch (filter) {
                 case "lastMonth": {
                     const monthAgo = new Date();
-                    monthAgo.setDate(monthAgo.getMonth() - 1);
+                    monthAgo.setMonth(monthAgo.getMonth() - 1);
                     return Object.keys(state.outlays).map((key) => state.outlays[key])
                         .filter(outlay => new Date(outlay.date) > monthAgo)
                         .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));

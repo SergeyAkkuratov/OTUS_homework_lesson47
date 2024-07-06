@@ -14,6 +14,7 @@ export default function OutlayTable() {
                         <th scope="col">Sum</th>
                         <th scope="col">Category</th>
                         <th scope="col">Comment</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

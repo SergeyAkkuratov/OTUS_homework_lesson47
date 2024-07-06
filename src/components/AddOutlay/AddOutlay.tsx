@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { OutlayType } from "../../store/Store.types";
 import { getCategories } from "../../firebase/firebaseAPI";
 import { useNavigate } from "react-router-dom";
-import { outlaysSlice, useAppDispatch } from "../../store/Store";
+import { outlaysSlice, store, useAppDispatch, useAppSelector } from "../../store/Store";
+import { push, set, update } from "firebase/database";
+import { v4 } from "uuid";
 
 
 
 
 export default function AddOutlay() {
+    const dbRef = useAppSelector(outlaysSlice.selectors.dbReference);
     const [categories, setCategories] = useState(getCategories());
     //TODO: сделать асинхронное получение категорий из базы и обновление
     const cleanFormData = {
@@ -17,7 +20,7 @@ export default function AddOutlay() {
         category: categories[0].name, //TODO: нвдо что-то делвть с именами и ID категорий
         comment: ""
     };
-    
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -30,7 +33,8 @@ export default function AddOutlay() {
 
     async function submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        dispatch(outlaysSlice.actions.outlayCreate({id: "null", ...formData}));
+        const newOutlay = push(dbRef!);
+        await set(newOutlay, { id: newOutlay.key, ...formData });
         setFormData(cleanFormData);
     }
 
@@ -47,7 +51,7 @@ export default function AddOutlay() {
                     </div>
                     <div>
                         <label htmlFor="date" className="form-label mt-1">Date</label>
-                        <input type="date" className="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter email" value={formData.date} onChange={handleChange} />
+                        <input type="datetime-local" className="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter email" value={formData.date} onChange={handleChange} />
                     </div>
                     <div>
                         <label htmlFor="sum" className="form-label mt-1">Sum</label>

@@ -1,3 +1,5 @@
+import { DatabaseReference } from "firebase/database";
+
 export enum OutlayType {
     OUTLAY = "OUTLAY",
     INCOME = "INCOME"
@@ -24,12 +26,18 @@ export interface Outlay {
     comment: string;
 }
 
+export interface Outlays {
+    [id: string]: Outlay;
+}
+
 export interface UserState {
     status: AuthStatus;
     email: string | null;
+    uid: string | null;
 }
 
 export interface OutlaysState {
     connected: boolean;
-    outlays: Outlay[];
+    dbReference: DatabaseReference | null;
+    outlays: Outlays;
 }

@@ -1,6 +1,7 @@
 import { Category } from "../store/Store.types";
-import { FirebaseError, initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential, User, AuthError } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref } from "firebase/database"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,6 +18,9 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export const firebaseAuth = getAuth();
+export const firebaseDb = getDatabase();
+
+const dbRef = ref(firebaseDb, 'posts');
 
 // Mocks
 const testCategories: Category[] = [

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector, userSlice } from "../../store/Store";
+import { outlaysSlice, useAppDispatch, useAppSelector, userSlice } from "../../store/Store";
 import { firebaseAuth } from "../../firebase/firebaseAPI";
 import { signOut } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
@@ -13,6 +13,7 @@ export function User() {
     async function signOutApi() {
         try {
             await signOut(firebaseAuth);
+            dispatch(outlaysSlice.actions.disconnect());
             dispatch(userSlice.actions.signOut());
             navigate("/");
         } catch (error) {

@@ -1,9 +1,10 @@
-import React, { MouseEventHandler, useState } from "react";
-import { useAppDispatch, userSlice } from "../../store/Store";
+import React, { useState } from "react";
+import { outlaysSlice, store, useAppDispatch, userSlice } from "../../store/Store";
 import { firebaseAuth } from "../../firebase/firebaseAPI";
-import { AuthStatus } from "../../store/Store.types";
+import { AuthStatus, UserState } from "../../store/Store.types";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { onValue, push } from "firebase/database";
 
 export default function SingIn() {
     const dispatch = useAppDispatch();
@@ -19,57 +20,61 @@ export default function SingIn() {
         setFormData((prevState) => ({ ...prevState, [id]: value }));
     };
 
-    async function signIn(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+    async function signInOrUp(firebaseFunction: typeof signInWithEmailAndPassword | typeof createUserWithEmailAndPassword) {
         dispatch(userSlice.actions.startAuth());
         setFormData({
             email: "",
             password: "",
         })
         try {
-            const userCredential = await signInWithEmailAndPassword(firebaseAuth, formData.email, formData.password)
-            dispatch(userSlice.actions.successAuth({
+            const userCredential = await firebaseFunction(firebaseAuth, formData.email, formData.password);
+            const newUserState: UserState = {
                 status: AuthStatus.DONE,
-                email: userCredential.user.email
-            }))
+                email: userCredential.user.email,
+                uid: userCredential.user.uid
+            };
+            dispatch(userSlice.actions.successAuth(newUserState))
+            dbConnect(newUserState);
+            navigate("/");
         } catch (error) {
             dispatch(userSlice.actions.failureAuth())
         }
-        navigate("/");
     }
 
-    async function signUp() {
-        dispatch(userSlice.actions.startAuth());
-        setFormData({
-            email: "",
-            password: "",
-        })
+    async function dbConnect(userState: UserState) {
         try {
-            const userCredential = await createUserWithEmailAndPassword(firebaseAuth, formData.email, formData.password);
-            dispatch(userSlice.actions.successAuth({
-                status: AuthStatus.DONE,
-                email: userCredential.user.email
-            }))
+            dispatch(outlaysSlice.actions.connect(userState));
+            onValue(store.getState().Outlays.dbReference!, (snapshot) => {
+                const data = snapshot.val();
+                if (data === null) {
+                    push(store.getState().Outlays.dbReference!, {});
+                    dispatch(outlaysSlice.actions.outlaySet({}));
+                }else{
+                    dispatch(outlaysSlice.actions.outlaySet(data));
+                }
+            });
         } catch (error) {
-            dispatch(userSlice.actions.failureAuth())
+            console.error("Coonect error");
         }
-        navigate("/");
     }
 
     return (
         <>
-            <form onSubmit={(event) => signIn(event)}>
+            <form onSubmit={(event) => {
+                event.preventDefault();
+                signInOrUp(signInWithEmailAndPassword);
+            }}>
                 <fieldset>
                     <div>
                         <label htmlFor="email" className="form-label mt-1">Login</label>
-                        <input type="text" className="form-control" id="email" aria-describedby="loginHelp" placeholder="Enter login" onChange={handleChange}/>
+                        <input type="text" className="form-control" id="email" aria-describedby="loginHelp" placeholder="Enter login" onChange={handleChange} />
                     </div>
                     <div className="mb3">
                         <label htmlFor="password" className="form-label mt-1">Password</label>
-                        <input type="password" className="form-control" id="password" placeholder="Password" autoComplete="off" onChange={handleChange}/>
+                        <input type="password" className="form-control" id="password" placeholder="Password" autoComplete="off" onChange={handleChange} />
                     </div>
                     <button type="submit" className="btn btn-primary mt-2 me-sm-2">Sign in</button>
-                    <button type="button" className="btn btn-secondary mt-2" onClick={signUp}>Sign up</button>
+                    <button type="button" className="btn btn-secondary mt-2" onClick={() => signInOrUp(createUserWithEmailAndPassword)}>Sign up</button>
                 </fieldset>
             </form>
         </>

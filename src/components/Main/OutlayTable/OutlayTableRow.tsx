@@ -1,14 +1,14 @@
 import React from "react";
-import { Outlay, OutlayType } from "../../store/Store.types";
+import { Outlay, OutlayType } from "../../../store/Store.types";
 import { child, set } from "firebase/database";
-import { store } from "../../store/Store";
+import { categoriesSlice, store, useAppSelector } from "../../../store/Store";
 
 export type OutlayTableRowProps = {
     data: Outlay;
 }
 
 export default function OutlayTableRow(props: OutlayTableRowProps) {
-
+    const categoryName = useAppSelector((state) => categoriesSlice.selectors.categoryNameWithId(state, props.data.category));
     async function deleteOutlay() {
         if(confirm("Are you shure want to delete this outlay?")){
             await set(child(store.getState().Outlays.dbReference!, props.data.id), null);
@@ -21,7 +21,7 @@ export default function OutlayTableRow(props: OutlayTableRowProps) {
                 <th scope="row">{props.data.type}</th>
                 <td>{new Date(props.data.date).toDateString()}</td>
                 <td>{props.data.sum}</td>
-                <td>{props.data.category}</td>
+                <td>{categoryName}</td>
                 <td>{props.data.comment}</td>
                 <td><button type="button" className="btn btn-outline-secondary" onClick={deleteOutlay}>Delete</button></td>
             </tr>

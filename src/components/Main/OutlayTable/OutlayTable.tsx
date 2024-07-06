@@ -1,5 +1,5 @@
 import React from "react";
-import { outlaysSlice, useAppSelector } from "../../store/Store";
+import { outlaysSlice, useAppSelector } from "../../../store/Store";
 import OutlayTableRow from "./OutlayTableRow";
 
 export default function OutlayTable() {

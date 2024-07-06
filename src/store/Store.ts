@@ -1,8 +1,8 @@
 import { PayloadAction, configureStore, createSlice } from "@reduxjs/toolkit";
-import { AuthStatus, Outlay, OutlayType, Outlays, OutlaysState, UserState } from "./Store.types";
+import { AuthStatus, Categories, CategoriesState, Category, Outlay, OutlayType, Outlays, OutlaysState, UserState } from "./Store.types";
 import { useDispatch, useSelector } from "react-redux";
 import { firebaseDb } from "../firebase/firebaseAPI";
-import { onValue, ref } from "firebase/database";
+import { child, ref } from "firebase/database";
 
 const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,
@@ -14,6 +14,42 @@ const initialOutlaysState: OutlaysState = {
     connected: false,
     dbReference: null,
     outlays: {}
+}
+
+const initialCategories: CategoriesState = {
+    dbReference: null,
+    categories: {
+        0: {
+            id: "0",
+            name: "Food",
+            parent: null
+        },
+        1: {
+            id: "1",
+            name: "Bills",
+            parent: null
+        },
+        2: {
+            id: "2",
+            name: "Medecine",
+            parent: null
+        },
+        3: {
+            id: "3",
+            name: "Transport",
+            parent: null
+        },
+        4: {
+            id: "4",
+            name: "Entertainment",
+            parent: null
+        },
+        5: {
+            id: "5",
+            name: "Salary",
+            parent: null
+        },
+    }
 }
 
 export const userSlice = createSlice({
@@ -67,7 +103,53 @@ export const outlaysSlice = createSlice({
         lastWeekOutlays: (state) => {
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
-            return Object.keys(state.outlays).map((key) => state.outlays[key]).filter(outlay => new Date(outlay.date) > weekAgo).sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+            return Object.keys(state.outlays).map((key) => state.outlays[key])
+                .filter(outlay => new Date(outlay.date) > weekAgo)
+                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+        },
+        lastMonthOutlays: (state) => {
+            const monthAgo = new Date();
+            monthAgo.setDate(monthAgo.getMonth() - 1);
+            return Object.keys(state.outlays).map((key) => state.outlays[key])
+                .filter(outlay => new Date(outlay.date) > monthAgo)
+                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+        },
+        betweenTwoDates: (state, startDate: Date, endDate: Date) => {
+            return Object.keys(state.outlays).map((key) => state.outlays[key])
+                .filter(outlay => new Date(outlay.date) >= startDate && new Date(outlay.date) <= endDate)
+                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+        }
+    }
+})
+
+export const categoriesSlice = createSlice({
+    name: "Categories",
+    initialState: initialCategories,
+    reducers: {
+        setCategories: (state, action: PayloadAction<Categories>) => {
+            state.categories = action.payload;
+        },
+        connect: (state, action: PayloadAction<UserState>) => {
+            state.dbReference = child(ref(firebaseDb, action.payload.uid!), "categories");
+        },
+    },
+    selectors: {
+        dbReference: (state) => state.dbReference,
+        categoryNameWithId: (state, id: string) => {
+            if (!state.categories[id]) {
+                console.log(id);
+            }
+            return state.categories[id].name;
+        },
+        listOfCategories: (state) => {
+            return Object.keys(state.categories).map((key) => state.categories[key]);
+        },
+        highestCategoryName: (state, id: string) => {
+            let category = state.categories[id];
+            while(category.parent) {
+                category = state.categories[category.parent];
+            }
+            return category.name;
         }
     }
 })
@@ -75,7 +157,8 @@ export const outlaysSlice = createSlice({
 export const store = configureStore({
     reducer: {
         User: userSlice.reducer,
-        Outlays: outlaysSlice.reducer
+        Outlays: outlaysSlice.reducer,
+        Categories: categoriesSlice.reducer,
     },
 })
 

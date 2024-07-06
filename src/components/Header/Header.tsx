@@ -21,17 +21,26 @@ export default function Header() {
 							<li className="nav-item">
 								<Link className="nav-link" to='/about'>About</Link>
 							</li>
-							<li className="nav-item">
-								{isAuth ? (
-									<>
+							{isAuth ? (
+								<>
+									<li className="nav-item">
+										<Link className="nav-link" to='/categories'>Categories</Link>
+									</li>
+									<li className="nav-item">
+										<Link className="nav-link" to='/statistic'>Statistic</Link>
+									</li>
+									<li className="nav-item">
 										<Link className="nav-link" to='/user'><span className="badge bg-success">{userEmail}</span></Link>
-									</>
-								) : (
-									<>
-										<Link className="nav-link" to='/signin'>SingIn</Link>
-									</>
-								)}
-							</li>
+									</li>
+								</>
+							) : (
+								<>
+									<li className="nav-item">
+										<Link className="nav-link" to='/signin'>SignIn</Link>
+									</li>
+								</>
+							)}
+
 						</ul>
 					</div>
 				</div>

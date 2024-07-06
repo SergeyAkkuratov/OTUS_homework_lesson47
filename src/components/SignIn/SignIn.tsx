@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { outlaysSlice, store, useAppDispatch, userSlice } from "../../store/Store";
+import React, { useEffect, useState } from "react";
+import { categoriesSlice, outlaysSlice, store, useAppDispatch, userSlice } from "../../store/Store";
 import { firebaseAuth } from "../../firebase/firebaseAPI";
 import { AuthStatus, UserState } from "../../store/Store.types";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { onValue, push } from "firebase/database";
+import { onValue, push, set } from "firebase/database";
 
 export default function SingIn() {
     const dispatch = useAppDispatch();
@@ -34,7 +34,8 @@ export default function SingIn() {
                 uid: userCredential.user.uid
             };
             dispatch(userSlice.actions.successAuth(newUserState))
-            dbConnect(newUserState);
+            await dbConnect(newUserState);
+            await categoriesConnect(newUserState);
             navigate("/");
         } catch (error) {
             dispatch(userSlice.actions.failureAuth())
@@ -49,12 +50,28 @@ export default function SingIn() {
                 if (data === null) {
                     push(store.getState().Outlays.dbReference!, {});
                     dispatch(outlaysSlice.actions.outlaySet({}));
-                }else{
+                } else {
                     dispatch(outlaysSlice.actions.outlaySet(data));
                 }
             });
         } catch (error) {
             console.error("Coonect error");
+        }
+    }
+
+    async function categoriesConnect(userState: UserState) {
+        try {
+            dispatch(categoriesSlice.actions.connect(userState));
+            onValue(store.getState().Categories.dbReference!, async (snapshot) => {
+                const data = snapshot.val();
+                if (data === null) {
+                    await set(store.getState().Categories.dbReference!, store.getState().Categories.categories);
+                } else {
+                    dispatch(categoriesSlice.actions.setCategories(data));
+                }
+            });
+        } catch (error) {
+            console.error("Categories Coonect error");
         }
     }
 

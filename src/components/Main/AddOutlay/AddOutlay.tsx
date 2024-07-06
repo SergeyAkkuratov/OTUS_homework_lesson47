@@ -1,28 +1,19 @@
 import React, { useState } from "react";
-import { OutlayType } from "../../store/Store.types";
-import { getCategories } from "../../firebase/firebaseAPI";
-import { useNavigate } from "react-router-dom";
-import { outlaysSlice, store, useAppDispatch, useAppSelector } from "../../store/Store";
-import { push, set, update } from "firebase/database";
-import { v4 } from "uuid";
-
-
-
+import { OutlayType } from "../../../store/Store.types";
+import { getCategories } from "../../../firebase/firebaseAPI";
+import { categoriesSlice, outlaysSlice, useAppSelector } from "../../../store/Store";
+import { push, set } from "firebase/database";
 
 export default function AddOutlay() {
     const dbRef = useAppSelector(outlaysSlice.selectors.dbReference);
-    const [categories, setCategories] = useState(getCategories());
-    //TODO: сделать асинхронное получение категорий из базы и обновление
+    const categories = useAppSelector(categoriesSlice.selectors.listOfCategories);
     const cleanFormData = {
         type: OutlayType.INCOME,
         date: "",
         sum: 0,
-        category: categories[0].name, //TODO: нвдо что-то делвть с именами и ID категорий
+        category: categories[0].id,
         comment: ""
     };
-
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState(cleanFormData);
 
@@ -62,9 +53,9 @@ export default function AddOutlay() {
                     </div>
                     <div>
                         <label htmlFor="category" className="form-label mt-1">Category</label>
-                        <select className="form-select" id="category" value={formData.category} onChange={handleChange}>
-                            {categories.map((category, index) => (
-                                <option key={index}>{category.name}</option>
+                        <select className="form-select" id="category" onChange={handleChange}>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
                         </select>
                     </div>

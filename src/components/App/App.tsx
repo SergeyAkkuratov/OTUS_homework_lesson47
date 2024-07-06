@@ -4,9 +4,12 @@ import "bootswatch/dist/darkly/bootstrap.min.css";
 import { User } from "../User/User";
 import Main from "../Main/Main";
 import { useAppSelector, userSlice } from "../../store/Store";
+
 const About = React.lazy(() => import("../About/About"));
-const SingIn = React.lazy(() => import("../SingIn/SingIn"));
+const SignIn = React.lazy(() => import("../SignIn/SignIn"));
 const Header = React.lazy(() => import("../Header/Header"));
+const Categories = React.lazy(() => import("../Categories/Categories"));
+const Statistic = React.lazy(() => import("../Statistic/Statistic"));
 
 export default function App() {
     const isAuth = useAppSelector(userSlice.selectors.isAuth);
@@ -19,10 +22,14 @@ export default function App() {
                     <Route path="/" element={<Main />} />
                     <Route path="about" element={<About />} />
                     {isAuth ? (
-                        <Route path="user" element={<User />} />
+                        <>
+                            <Route path="categories" element={<Categories />} />
+                            <Route path="statistic" element={<Statistic />} />
+                            <Route path="user" element={<User />} />
+                        </>
                     ) : (
                         <>
-                            <Route path="signin" element={<SingIn />} />
+                            <Route path="signin" element={<SignIn />} />
                         </>
                     )}
                 </Routes>

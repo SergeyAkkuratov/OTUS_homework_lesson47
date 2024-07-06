@@ -1,8 +1,8 @@
 import React from "react";
 import { useAppSelector, userSlice } from "../../store/Store";
 import { Link } from "react-router-dom";
-import OutlayTable from "../OutlayTable/OutlayTable";
-import AddOutlay from "../AddOutlay/AddOutlay";
+import OutlayTable from "./OutlayTable/OutlayTable";
+import AddOutlay from "./AddOutlay/AddOutlay";
 
 export default function () {
     const isAuth = useAppSelector(userSlice.selectors.isAuth);

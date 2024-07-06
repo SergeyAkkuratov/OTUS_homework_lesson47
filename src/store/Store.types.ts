@@ -17,6 +17,10 @@ export interface Category {
     parent: string | null;
 }
 
+export interface Categories {
+    [id: string]: Category;
+}
+
 export interface Outlay {
     id: string;
     type: OutlayType;
@@ -40,4 +44,9 @@ export interface OutlaysState {
     connected: boolean;
     dbReference: DatabaseReference | null;
     outlays: Outlays;
+}
+
+export interface CategoriesState {
+    dbReference: DatabaseReference | null;
+    categories: Categories;
 }

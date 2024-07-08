@@ -7,13 +7,13 @@ export default function Header() {
     const userEmail = useAppSelector((state) => state.User.email);
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-dark fixed-top" data-bs-theme="dark">
+            <nav className="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
                 <div className="container-fluid">
                     <a className="navbar-brand" href={`${PREFIX}/`}>
                         Outlays
                     </a>
                     <button
-                        className="navbar-toggler"
+                        className="navbar-toggler collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#navbar"

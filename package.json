@@ -7,12 +7,7 @@
         "lint": "prettier --check . && eslint . --ext .js,.ts",
         "lint:fix": "prettier --write . && eslint . --fix",
         "build": "webpack --mode=production",
-        "start": "webpack serve --mode=development",
-        "pack": "tsc",
-        "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build --test --quiet",
-        "loki-test": "loki test --requireReference --reactUri file:./storybook-static",
-        "loki-update": "loki update --requireReference --reactUri file:./storybook-static"
+        "start": "webpack serve --mode=development"
     },
     "repository": {
         "type": "git",

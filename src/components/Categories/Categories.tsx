@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { categoriesSlice, listOfCategories, useAppSelector } from "../../store/Store";
+import { categoriesDbReference, categoriesSlice, listOfCategories, useAppSelector } from "../../store/Store";
 import { push, set } from "firebase/database";
 import CategoriesTable from "./CategoriesTable/CategoriesTable";
 
 export default function Categories() {
-    const categoriesDbRef = useAppSelector(categoriesSlice.selectors.dbReference);
+    const categoriesDbRef = useAppSelector(categoriesDbReference);
     const categories = useAppSelector(listOfCategories);
     const [formData, setFormData] = useState({
         name: "",

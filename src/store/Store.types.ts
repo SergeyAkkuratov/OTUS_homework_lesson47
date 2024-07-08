@@ -41,12 +41,9 @@ export interface UserState {
 }
 
 export interface OutlaysState {
-    connected: boolean;
-    dbReference: DatabaseReference | null;
     outlays: Outlays;
 }
 
 export interface CategoriesState {
-    dbReference: DatabaseReference | null;
     categories: Categories;
 }

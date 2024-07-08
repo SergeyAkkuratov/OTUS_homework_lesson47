@@ -11,13 +11,10 @@ const initialUserState: UserState = {
 }
 
 const initialOutlaysState: OutlaysState = {
-    connected: false,
-    dbReference: null,
     outlays: {}
 }
 
 const initialCategories: CategoriesState = {
-    dbReference: null,
     categories: {
         0: {
             id: "0",
@@ -88,18 +85,7 @@ export const outlaysSlice = createSlice({
             } else {
                 state.outlays = {};
             }
-
-        },
-        connect: (state, action: PayloadAction<UserState>) => {
-            state.dbReference = ref(firebaseDb, action.payload.uid!);
-            state.connected = true
-        },
-        disconnect: (state) => {
-            return initialOutlaysState;
         }
-    },
-    selectors: {
-        dbReference: (state) => { return state.dbReference }
     }
 })
 
@@ -109,13 +95,9 @@ export const categoriesSlice = createSlice({
     reducers: {
         setCategories: (state, action: PayloadAction<Categories>) => {
             state.categories = action.payload;
-        },
-        connect: (state, action: PayloadAction<UserState>) => {
-            state.dbReference = child(ref(firebaseDb, action.payload.uid!), "categories");
-        },
+        }
     },
     selectors: {
-        dbReference: (state) => state.dbReference,
         categoryNameWithId: (state, id: string) => {
             if (!state.categories[id]) {
                 console.log(id);
@@ -140,39 +122,6 @@ export const store = configureStore({
     },
 })
 
-export async function dbConnect(userState: UserState) {
-    try {
-        store.dispatch(outlaysSlice.actions.connect(userState));
-        onValue(store.getState().Outlays.dbReference!, (snapshot) => {
-            const data = snapshot.val();
-            if (data === null) {
-                push(store.getState().Outlays.dbReference!, {});
-                store.dispatch(outlaysSlice.actions.outlaySet({}));
-            } else {
-                store.dispatch(outlaysSlice.actions.outlaySet(data));
-            }
-        });
-    } catch (error) {
-        console.error("Coonect error");
-    }
-}
-
-export async function categoriesConnect(userState: UserState) {
-    try {
-        store.dispatch(categoriesSlice.actions.connect(userState));
-        onValue(store.getState().Categories.dbReference!, async (snapshot) => {
-            const data = snapshot.val();
-            if (data === null) {
-                await set(store.getState().Categories.dbReference!, store.getState().Categories.categories);
-            } else {
-                store.dispatch(categoriesSlice.actions.setCategories(data));
-            }
-        });
-    } catch (error) {
-        console.error("Categories Coonect error");
-    }
-}
-
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
@@ -181,6 +130,11 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 export const createAppSelector = createSelector.withTypes<RootState>();
+
+export const outlayDbReference = createAppSelector(
+    [(state) => {return state.User.uid}],
+    (uid: string | null) => uid ? ref(firebaseDb, uid) : null
+)
 
 export const filterOutlays = createAppSelector(
     [
@@ -193,6 +147,11 @@ export const filterOutlays = createAppSelector(
                     .filter(outlay => new Date(outlay.date) >= new Date(startDate) && new Date(outlay.date) <= new Date(endDate))
                     .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
     }
+);
+
+export const categoriesDbReference = createAppSelector(
+    [(state) => {return state.User.uid}],
+    (uid: string | null) => uid ? child(ref(firebaseDb, uid), "categories") : null
 )
 
 export const listOfCategories = createAppSelector(
@@ -200,4 +159,35 @@ export const listOfCategories = createAppSelector(
     (categories: Categories) => {
         return Object.keys(categories).map((key) => categories[key]);
     }
-)
+);
+
+export async function dbConnect() {
+    try {
+        onValue(outlayDbReference(store.getState())!, (snapshot) => {
+            const data = snapshot.val();
+            if (data === null) {
+                push(outlayDbReference(store.getState())!, {});
+                store.dispatch(outlaysSlice.actions.outlaySet({}));
+            } else {
+                store.dispatch(outlaysSlice.actions.outlaySet(data));
+            }
+        });
+    } catch (error) {
+        console.error("Coonect error");
+    }
+}
+
+export async function categoriesConnect() {
+    try {
+        onValue(categoriesDbReference(store.getState())!, async (snapshot) => {
+            const data = snapshot.val();
+            if (data === null) {
+                await set(categoriesDbReference(store.getState())!, store.getState().Categories.categories);
+            } else {
+                store.dispatch(categoriesSlice.actions.setCategories(data));
+            }
+        });
+    } catch (error) {
+        console.error("Categories Coonect error");
+    }
+}

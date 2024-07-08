@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { OutlayType } from "../../../store/Store.types";
-import { listOfCategories, outlaysSlice, useAppSelector } from "../../../store/Store";
+import { listOfCategories, outlayDbReference, outlaysSlice, useAppSelector } from "../../../store/Store";
 import { push, set } from "firebase/database";
 import { formatDate } from "../../../helpers";
 
 export default function AddOutlay() {
-    const dbRef = useAppSelector(outlaysSlice.selectors.dbReference);
+    const dbRef = useAppSelector(outlayDbReference);
     const categories = useAppSelector(listOfCategories);
     const cleanFormData = {
-        type: OutlayType.INCOME,
+        type: OutlayType.OUTLAY,
         date: formatDate(new Date()),
         sum: 0,
         category: categories[0].id,
@@ -36,8 +36,8 @@ export default function AddOutlay() {
                     <div>
                         <label htmlFor="type" className="form-label mt-1">Type</label>
                         <select className="form-select" id="type" value={formData.type} onChange={handleChange}>
-                            <option>{OutlayType.INCOME}</option>
                             <option>{OutlayType.OUTLAY}</option>
+                            <option>{OutlayType.INCOME}</option>
                         </select>
                     </div>
                     <div>

@@ -44,8 +44,8 @@ export default function App() {
                 uid: user.uid
             };
             dispatch(userSlice.actions.successAuth(newUserState))
-            await dbConnect(newUserState);
-            await categoriesConnect(newUserState);
+            await dbConnect();
+            await categoriesConnect();
           }
         }
       });

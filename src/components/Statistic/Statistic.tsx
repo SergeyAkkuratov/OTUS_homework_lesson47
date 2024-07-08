@@ -1,6 +1,6 @@
 import React from "react";
 import { Chart } from "react-google-charts";
-import { categoriesSlice, filterOutlays, store } from "../../store/Store";
+import { categoriesSlice, filterOutlays, store, useAppSelector, userSlice } from "../../store/Store";
 import { OutlayType } from "../../store/Store.types";
 import { useSearchParams } from "react-router-dom";
 import OutlayTable from "../OutlayTable/OutlayTable";
@@ -13,18 +13,18 @@ export default function Statistic() {
     lastWeek.setDate(lastWeek.getDate() - 7);
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    // 2024-07-01T16:25
-    // 2024-06-08T13:25:28.781Z
+
     const [searchParams, setSearchParams] = useSearchParams([
         ["filter", "LastWeek"],
         ["startDate", formatDate(lastWeek)],
         ["endDate", formatDate(today)],
         ["isChart", "false"]
     ]);
+    const outlays = useAppSelector((state) => filterOutlays(state, searchParams.get("startDate")!, searchParams.get("endDate")!));
 
     function getData() {
         const result: { [id: string]: number } = {};
-        filterOutlays(store.getState(), searchParams.get("startDate")!, searchParams.get("endDate")!).forEach((outLay) => {
+        outlays.forEach((outLay) => {
             if (outLay.type === OutlayType.OUTLAY) {
                 const sum = outLay.sum;
                 const category = categoriesSlice.selectors.highestCategoryName(store.getState(), outLay.category);

@@ -1,7 +1,7 @@
 import React from "react";
 import { Category, Outlay, OutlayType } from "../../../store/Store.types";
 import { child, set } from "firebase/database";
-import { categoriesSlice, store, useAppSelector } from "../../../store/Store";
+import { categoriesDbReference, categoriesSlice, store, useAppSelector } from "../../../store/Store";
 
 export type CategoriesTableRowProps = {
     data: Category;
@@ -14,7 +14,7 @@ export default function CategoriesTableRow(props: CategoriesTableRowProps) {
 
     async function deleteCategory() {
         if (confirm(`Are you shure want to delete this Categpory: ${props.data.name}?`)) {
-            await set(child(store.getState().Categories.dbReference!, props.data.id), null);
+            await set(child(categoriesDbReference(store.getState())!, props.data.id), null);
         }
     }
 

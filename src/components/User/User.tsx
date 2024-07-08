@@ -13,7 +13,6 @@ export function User() {
     async function signOutApi() {
         try {
             await signOut(firebaseAuth);
-            dispatch(outlaysSlice.actions.disconnect());
             dispatch(userSlice.actions.signOut());
             navigate("/");
         } catch (error) {
@@ -25,7 +24,7 @@ export function User() {
 
     return (
         <>
-            <legend>Sing in user:</legend>
+            <legend>Sign in user:</legend>
             <div className="row">
                 <label htmlFor="staticEmail" className="col-sm-2 col-form-label">Email</label>
                 <div className="col-sm-10">

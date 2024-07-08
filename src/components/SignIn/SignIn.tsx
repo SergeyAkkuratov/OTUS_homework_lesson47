@@ -34,11 +34,11 @@ export default function SingIn() {
                 uid: userCredential.user.uid
             };
             dispatch(userSlice.actions.successAuth(newUserState))
-            await dbConnect(newUserState);
-            await categoriesConnect(newUserState);
+            await dbConnect();
+            await categoriesConnect();
             navigate("/");
         } catch (error) {
-            console.log(error);
+            console.error(error);
             dispatch(userSlice.actions.failureAuth())
         }
     }

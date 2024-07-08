@@ -7,21 +7,21 @@ export default function Header() {
     const userEmail = useAppSelector((state) => state.User.email);
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+            <nav className="navbar navbar-expand-lg bg-dark fixed-top" data-bs-theme="dark">
                 <div className="container-fluid">
-                    <p className="navbar-brand">OUTLAYS</p>
+                    <a className="navbar-brand" href={`${PREFIX}/`}>Outlays</a>
                     <button
                         className="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#navbarColor02"
-                        aria-controls="navbarColor02"
+                        data-bs-target="#navbar"
+                        aria-controls="navbar"
                         aria-expanded="false"
                         aria-label="Toggle navigation"
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarColor02">
+                    <div className="collapse navbar-collapse" id="navbar">
                         <ul className="navbar-nav me-auto">
                             <li className="nav-item">
                                 <Link className="nav-link" to={`${PREFIX}/`}>

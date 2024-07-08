@@ -122,9 +122,6 @@ export const categoriesSlice = createSlice({
             }
             return state.categories[id].name;
         },
-        listOfCategories: (state) => {
-            return Object.keys(state.categories).map((key) => state.categories[key]);
-        },
         highestCategoryName: (state, id: string) => {
             let category = state.categories[id];
             while (category.parent) {
@@ -195,5 +192,12 @@ export const filterOutlays = createAppSelector(
         return Object.keys(outlays).map((key) => outlays[key])
                     .filter(outlay => new Date(outlay.date) >= new Date(startDate) && new Date(outlay.date) <= new Date(endDate))
                     .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+    }
+)
+
+export const listOfCategories = createAppSelector(
+    [(state) => {return state.Categories.categories}],
+    (categories: Categories) => {
+        return Object.keys(categories).map((key) => categories[key]);
     }
 )

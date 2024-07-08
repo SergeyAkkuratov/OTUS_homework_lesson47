@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { OutlayType } from "../../../store/Store.types";
-import { categoriesSlice, outlaysSlice, useAppSelector } from "../../../store/Store";
+import { listOfCategories, outlaysSlice, useAppSelector } from "../../../store/Store";
 import { push, set } from "firebase/database";
+import { formatDate } from "../../../helpers";
 
 export default function AddOutlay() {
     const dbRef = useAppSelector(outlaysSlice.selectors.dbReference);
-    const categories = useAppSelector(categoriesSlice.selectors.listOfCategories);
+    const categories = useAppSelector(listOfCategories);
     const cleanFormData = {
         type: OutlayType.INCOME,
-        date: "",
+        date: formatDate(new Date()),
         sum: 0,
         category: categories[0].id,
         comment: ""
@@ -62,7 +63,7 @@ export default function AddOutlay() {
                         <label htmlFor="comment" className="form-label mt-1">Comment</label>
                         <textarea className="form-control" id="comment" rows={3} value={formData.comment} onChange={handleChange}></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary mt-2">Add</button>
+                    <button type="submit" className="btn btn-primary mt-2">Add {formData.type}</button>
                 </fieldset>
             </form>
         </>

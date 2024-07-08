@@ -9,7 +9,7 @@ export default function Header() {
 		<>
 			<nav className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
 				<div className="container-fluid">
-					<p className="navbar-brand">OUTLAY</p>
+					<p className="navbar-brand">OUTLAYS</p>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>

@@ -38,6 +38,7 @@ export default function SingIn() {
             await categoriesConnect(newUserState);
             navigate("/");
         } catch (error) {
+            console.log(error);
             dispatch(userSlice.actions.failureAuth())
         }
     }

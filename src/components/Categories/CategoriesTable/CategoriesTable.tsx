@@ -1,9 +1,9 @@
 import React from "react";
-import { categoriesSlice, useAppSelector } from "../../../store/Store";
+import { listOfCategories, useAppSelector } from "../../../store/Store";
 import CategoriesTableRow from "./CategoriesTableRow";
 
 export default function CategoriesTable() {
-    const categories = useAppSelector(categoriesSlice.selectors.listOfCategories);
+    const categories = useAppSelector(listOfCategories);
     return (
         <>
             <table className="table table-hover" data-bs-spy="scroll">

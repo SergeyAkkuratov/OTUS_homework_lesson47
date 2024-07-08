@@ -7,7 +7,7 @@ export default function Header() {
     const userEmail = useAppSelector((state) => state.User.email);
     return (
         <>
-            <nav className="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+            <nav className="navbar navbar-expand-sm bg-dark" data-bs-theme="dark" data-testid="header">
                 <div className="container-fluid">
                     <a className="navbar-brand" href={`${PREFIX}/`}>
                         Outlays
@@ -24,7 +24,7 @@ export default function Header() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbar">
-                        <ul className="navbar-nav me-auto">
+                        <ul className="navbar-nav me-auto" data-testid="linkList">
                             <li className="nav-item">
                                 <Link className="nav-link" to={`${PREFIX}/`}>
                                     Main

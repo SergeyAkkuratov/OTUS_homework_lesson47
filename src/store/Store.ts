@@ -7,17 +7,17 @@ import { child, onValue, push, ref, set } from "firebase/database";
 import { AuthStatus, Categories, CategoriesState, Outlays, OutlaysState, UserState } from "./StoreTypes";
 import { firebaseDb } from "../App";
 
-const initialUserState: UserState = {
+export const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,
     email: null,
     uid: null,
 };
 
-const initialOutlaysState: OutlaysState = {
+export const initialOutlaysState: OutlaysState = {
     outlays: {},
 };
 
-const initialCategories: CategoriesState = {
+export const initialCategories: CategoriesState = {
     categories: {
         0: {
             id: "0",

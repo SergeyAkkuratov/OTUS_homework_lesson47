@@ -3,9 +3,9 @@ import { filterOutlays, useAppSelector } from "../../store/Store";
 import OutlayTableRow from "./OutlayTableRow";
 
 export type OutlayTableProps = {
-    startDate: string,
-    endDate: string
-}
+    startDate: string;
+    endDate: string;
+};
 
 export default function OutlayTable(props: OutlayTableProps) {
     const outlays = useAppSelector((state) => filterOutlays(state, props.startDate, props.endDate));
@@ -23,9 +23,11 @@ export default function OutlayTable(props: OutlayTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {outlays.map((outlay, index) => <OutlayTableRow key={index} data={outlay} />)}
+                    {outlays.map((outlay, index) => (
+                        <OutlayTableRow key={index} data={outlay} />
+                    ))}
                 </tbody>
             </table>
         </>
-    )
+    );
 }

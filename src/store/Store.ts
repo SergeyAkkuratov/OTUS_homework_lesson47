@@ -1,78 +1,78 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-param-reassign */
 import { PayloadAction, configureStore, createSelector, createSlice } from "@reduxjs/toolkit";
-import { AuthStatus, Categories, CategoriesState, Category, Outlay, OutlayType, Outlays, OutlaysState, UserState } from "./Store.types";
 import { useDispatch, useSelector } from "react-redux";
 import { child, onValue, push, ref, set } from "firebase/database";
+import { AuthStatus, Categories, CategoriesState, Outlays, OutlaysState, UserState } from "./StoreTypes";
 import { firebaseDb } from "../App";
 
 const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,
     email: null,
-    uid: null
-}
+    uid: null,
+};
 
 const initialOutlaysState: OutlaysState = {
-    outlays: {}
-}
+    outlays: {},
+};
 
 const initialCategories: CategoriesState = {
     categories: {
         0: {
             id: "0",
             name: "Food",
-            parent: null
+            parent: null,
         },
         1: {
             id: "1",
             name: "Bills",
-            parent: null
+            parent: null,
         },
         2: {
             id: "2",
             name: "Medecine",
-            parent: null
+            parent: null,
         },
         3: {
             id: "3",
             name: "Transport",
-            parent: null
+            parent: null,
         },
         4: {
             id: "4",
             name: "Entertainment",
-            parent: null
+            parent: null,
         },
         5: {
             id: "5",
             name: "Salary",
-            parent: null
+            parent: null,
         },
-    }
-}
+    },
+};
 
 export const userSlice = createSlice({
     name: "User",
     initialState: initialUserState,
     reducers: {
-        startAuth: (state) => { state.status = AuthStatus.IN_PROGRESS },
-        successAuth: (state, action: PayloadAction<UserState>) => {
-            return action.payload;
+        startAuth: (state) => {
+            state.status = AuthStatus.IN_PROGRESS;
         },
+        successAuth: (state, action: PayloadAction<UserState>) => action.payload,
         failureAuth: (state) => {
-            console.error("Auth error");
             state.status = AuthStatus.NOT_DONE;
         },
-        signOut: (state) => {
-            return {
-                status: AuthStatus.NOT_DONE,
-                email: null,
-                uid: null
-            };
-        }
+        signOut: (state) => ({
+            status: AuthStatus.NOT_DONE,
+            email: null,
+            uid: null,
+        }),
     },
     selectors: {
         isAuth: (state) => state.status === AuthStatus.DONE,
         userUID: (state) => state.uid,
-    }
+    },
 });
 
 export const outlaysSlice = createSlice({
@@ -85,9 +85,9 @@ export const outlaysSlice = createSlice({
             } else {
                 state.outlays = {};
             }
-        }
-    }
-})
+        },
+    },
+});
 
 export const categoriesSlice = createSlice({
     name: "Categories",
@@ -95,24 +95,19 @@ export const categoriesSlice = createSlice({
     reducers: {
         setCategories: (state, action: PayloadAction<Categories>) => {
             state.categories = action.payload;
-        }
+        },
     },
     selectors: {
-        categoryNameWithId: (state, id: string) => {
-            if (!state.categories[id]) {
-                console.log(id);
-            }
-            return state.categories[id].name;
-        },
+        categoryNameWithId: (state, id: string) => state.categories[id].name,
         highestCategoryName: (state, id: string) => {
             let category = state.categories[id];
             while (category.parent) {
                 category = state.categories[category.parent];
             }
             return category.name;
-        }
-    }
-})
+        },
+    },
+});
 
 export const store = configureStore({
     reducer: {
@@ -120,7 +115,7 @@ export const store = configureStore({
         Outlays: outlaysSlice.reducer,
         Categories: categoriesSlice.reducer,
     },
-})
+});
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
@@ -131,34 +126,23 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 export const createAppSelector = createSelector.withTypes<RootState>();
 
-export const outlayDbReference = createAppSelector(
-    [(state) => {return state.User.uid}],
-    (uid: string | null) => uid ? ref(firebaseDb, uid) : null
-)
+export const outlayDbReference = createAppSelector([(state) => state.User.uid], (uid: string | null) => (uid ? ref(firebaseDb, uid) : null));
 
 export const filterOutlays = createAppSelector(
-    [
-        (state) => { return state.Outlays.outlays },
-        (state, startDate: string) => { return startDate },
-        (state, startDate: string, endDate: string) => { return endDate }
-    ],
-    (outlays: Outlays, startDate: string, endDate: string) => {
-        return Object.keys(outlays).map((key) => outlays[key])
-                    .filter(outlay => new Date(outlay.date) >= new Date(startDate) && new Date(outlay.date) <= new Date(endDate))
-                    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-    }
+    [(state) => state.Outlays.outlays, (state, startDate: string) => startDate, (state, startDate: string, endDate: string) => endDate],
+    (outlays: Outlays, startDate: string, endDate: string) =>
+        Object.keys(outlays)
+            .map((key) => outlays[key])
+            .filter((outlay) => new Date(outlay.date) >= new Date(startDate) && new Date(outlay.date) <= new Date(endDate))
+            .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
 );
 
-export const categoriesDbReference = createAppSelector(
-    [(state) => {return state.User.uid}],
-    (uid: string | null) => uid ? child(ref(firebaseDb, uid), "categories") : null
-)
+export const categoriesDbReference = createAppSelector([(state) => state.User.uid], (uid: string | null) =>
+    uid ? child(ref(firebaseDb, uid), "categories") : null
+);
 
-export const listOfCategories = createAppSelector(
-    [(state) => {return state.Categories.categories}],
-    (categories: Categories) => {
-        return Object.keys(categories).map((key) => categories[key]);
-    }
+export const listOfCategories = createAppSelector([(state) => state.Categories.categories], (categories: Categories) =>
+    Object.keys(categories).map((key) => categories[key])
 );
 
 export async function dbConnect() {
@@ -173,7 +157,7 @@ export async function dbConnect() {
             }
         });
     } catch (error) {
-        console.error("Coonect error");
+        console.error(`Coonect error: ${error}`);
     }
 }
 
@@ -188,6 +172,6 @@ export async function categoriesConnect() {
             }
         });
     } catch (error) {
-        console.error("Categories Coonect error");
+        console.error(`Coonect error: ${error}`);
     }
 }

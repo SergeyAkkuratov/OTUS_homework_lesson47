@@ -1,8 +1,6 @@
-import { DatabaseReference } from "firebase/database";
-
 export enum OutlayType {
     OUTLAY = "OUTLAY",
-    INCOME = "INCOME"
+    INCOME = "INCOME",
 }
 
 export enum AuthStatus {

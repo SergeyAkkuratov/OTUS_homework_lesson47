@@ -1,12 +1,10 @@
 import React from "react";
-// import "./style.css";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { store } from "./store/Store";
 import { Provider } from "react-redux";
+import { store } from "./store/Store";
 
 import App from "./App";
-
 
 const root = createRoot(document.getElementById("app")!);
 root.render(

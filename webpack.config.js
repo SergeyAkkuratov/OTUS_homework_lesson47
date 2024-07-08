@@ -11,7 +11,7 @@ module.exports = {
         clean: true,
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
     },
     devtool: "inline-source-map",
     plugins: [
@@ -28,7 +28,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: "ts-loader",
                 exclude: /node_modules/,
             },
             {
@@ -42,7 +42,7 @@ module.exports = {
                         loader: "file-loader?name=/images/[name].[ext]",
                     },
                 ],
-            }
+            },
         ],
     },
     devServer: {

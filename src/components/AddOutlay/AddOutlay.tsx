@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { OutlayType } from "../../store/Store.types";
-import { listOfCategories, outlayDbReference, outlaysSlice, useAppSelector } from "../../store/Store";
 import { push, set } from "firebase/database";
-import { formatDate } from "../../helpers";
+import { OutlayType } from "../../store/StoreTypes";
+import { listOfCategories, outlayDbReference, useAppSelector } from "../../store/Store";
+import formatDate from "../../helpers";
 
 export default function AddOutlay() {
     const dbRef = useAppSelector(outlayDbReference);
@@ -12,12 +12,14 @@ export default function AddOutlay() {
         date: formatDate(new Date()),
         sum: 0,
         category: categories[0].id,
-        comment: ""
+        comment: "",
     };
 
     const [formData, setFormData] = useState(cleanFormData);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChange = (
+        event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         const { id, value } = event.target;
         setFormData((prevState) => ({ ...prevState, [id]: value }));
     };
@@ -34,36 +36,50 @@ export default function AddOutlay() {
             <form className="mb-3" onSubmit={(event) => submit(event)}>
                 <fieldset>
                     <div>
-                        <label htmlFor="type" className="form-label mt-1">Type</label>
+                        <label htmlFor="type" className="form-label mt-1">
+                            Type
+                        </label>
                         <select className="form-select" id="type" value={formData.type} onChange={handleChange}>
                             <option>{OutlayType.OUTLAY}</option>
                             <option>{OutlayType.INCOME}</option>
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="date" className="form-label mt-1">Date</label>
+                        <label htmlFor="date" className="form-label mt-1">
+                            Date
+                        </label>
                         <input type="datetime-local" className="form-control" id="date" value={formData.date} onChange={handleChange} />
                     </div>
                     <div>
-                        <label htmlFor="sum" className="form-label mt-1">Sum</label>
+                        <label htmlFor="sum" className="form-label mt-1">
+                            Sum
+                        </label>
                         <div className="input-group">
                             <span className="input-group-text">$</span>
                             <input type="number" className="form-control" aria-label="Amount" id="sum" value={formData.sum} onChange={handleChange} />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="category" className="form-label mt-1">Category</label>
+                        <label htmlFor="category" className="form-label mt-1">
+                            Category
+                        </label>
                         <select className="form-select" id="category" onChange={handleChange}>
                             {categories.map((category) => (
-                                <option key={category.id} value={category.id}>{category.name}</option>
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
                             ))}
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="comment" className="form-label mt-1">Comment</label>
+                        <label htmlFor="comment" className="form-label mt-1">
+                            Comment
+                        </label>
                         <textarea className="form-control" id="comment" rows={3} value={formData.comment} onChange={handleChange}></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary mt-2">Add {formData.type}</button>
+                    <button type="submit" className="btn btn-primary mt-2">
+                        Add {formData.type}
+                    </button>
                 </fieldset>
             </form>
         </>

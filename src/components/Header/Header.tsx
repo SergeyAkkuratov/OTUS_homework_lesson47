@@ -9,7 +9,9 @@ export default function Header() {
         <>
             <nav className="navbar navbar-expand-lg bg-dark fixed-top" data-bs-theme="dark">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href={`${PREFIX}/`}>Outlays</a>
+                    <a className="navbar-brand" href={`${PREFIX}/`}>
+                        Outlays
+                    </a>
                     <button
                         className="navbar-toggler"
                         type="button"

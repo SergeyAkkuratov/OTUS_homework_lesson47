@@ -24,29 +24,29 @@ export default function Header() {
                     <div className="collapse navbar-collapse" id="navbarColor02">
                         <ul className="navbar-nav me-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/">
+                                <Link className="nav-link" to={`${PREFIX}/`}>
                                     Main
                                 </Link>
                             </li>
                             {isAuth ? (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/categories">
+                                        <Link className="nav-link" to={`${PREFIX}/categories`}>
                                             Categories
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/statistic">
+                                        <Link className="nav-link" to={`${PREFIX}/statistic`}>
                                             Statistic
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/about">
+                                        <Link className="nav-link" to={`${PREFIX}/about`}>
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/user">
+                                        <Link className="nav-link" to={`${PREFIX}/user`}>
                                             <span className="badge bg-success">{userEmail}</span>
                                         </Link>
                                     </li>
@@ -54,12 +54,12 @@ export default function Header() {
                             ) : (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/about">
+                                        <Link className="nav-link" to={`${PREFIX}/about`}>
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/signin">
+                                        <Link className="nav-link" to={`${PREFIX}/signin`}>
                                             SignIn
                                         </Link>
                                     </li>

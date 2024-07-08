@@ -1,5 +1,10 @@
 const path = require("path");
+const { DefinePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const isProduction =
+  process.argv[process.argv.indexOf("--mode") + 1] === "production";
+const PREFIX = isProduction ? "/OTUS_homework_lesson47" : "";
 
 module.exports = {
     entry: {
@@ -22,6 +27,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "src/index.html",
             filename: "404.html",
+        }),
+        new DefinePlugin({
+          PREFIX: JSON.stringify(PREFIX),
         }),
     ],
     module: {

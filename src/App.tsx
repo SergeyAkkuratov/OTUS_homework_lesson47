@@ -55,17 +55,17 @@ export default function App() {
             <Suspense>
                 <Header />
                 <Routes>
-                    <Route path="/" element={<Main />} />
-                    <Route path="about" element={<About />} />
+                    <Route path={`${PREFIX}/`} element={<Main />} />
+                    <Route path={`${PREFIX}/about`} element={<About />} />
                     {isAuth ? (
                         <>
-                            <Route path="categories" element={<Categories />} />
-                            <Route path="statistic" element={<Statistic />} />
-                            <Route path="user" element={<User />} />
+                            <Route path={`${PREFIX}/categories`} element={<Categories />} />
+                            <Route path={`${PREFIX}/statistic`} element={<Statistic />} />
+                            <Route path={`${PREFIX}/user`} element={<User />} />
                         </>
                     ) : (
                         <>
-                            <Route path="signin" element={<SignIn />} />
+                            <Route path={`${PREFIX}/signin`} element={<SignIn />} />
                         </>
                     )}
                 </Routes>

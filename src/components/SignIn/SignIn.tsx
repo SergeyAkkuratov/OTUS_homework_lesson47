@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { categoriesSlice, outlaysSlice, store, useAppDispatch, userSlice } from "../../store/Store";
-import { firebaseAuth } from "../../firebase/firebaseAPI";
+import React, { useState } from "react";
+import { categoriesConnect, dbConnect, useAppDispatch, userSlice } from "../../store/Store";
 import { AuthStatus, UserState } from "../../store/Store.types";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { onValue, push, set } from "firebase/database";
+import { browserLocalPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth } from "../App/App";
 
 export default function SingIn() {
     const dispatch = useAppDispatch();
@@ -27,6 +26,7 @@ export default function SingIn() {
             password: "",
         })
         try {
+            await setPersistence(firebaseAuth, browserLocalPersistence);
             const userCredential = await firebaseFunction(firebaseAuth, formData.email, formData.password);
             const newUserState: UserState = {
                 status: AuthStatus.DONE,
@@ -39,39 +39,6 @@ export default function SingIn() {
             navigate("/");
         } catch (error) {
             dispatch(userSlice.actions.failureAuth())
-        }
-    }
-
-    async function dbConnect(userState: UserState) {
-        try {
-            dispatch(outlaysSlice.actions.connect(userState));
-            onValue(store.getState().Outlays.dbReference!, (snapshot) => {
-                const data = snapshot.val();
-                if (data === null) {
-                    push(store.getState().Outlays.dbReference!, {});
-                    dispatch(outlaysSlice.actions.outlaySet({}));
-                } else {
-                    dispatch(outlaysSlice.actions.outlaySet(data));
-                }
-            });
-        } catch (error) {
-            console.error("Coonect error");
-        }
-    }
-
-    async function categoriesConnect(userState: UserState) {
-        try {
-            dispatch(categoriesSlice.actions.connect(userState));
-            onValue(store.getState().Categories.dbReference!, async (snapshot) => {
-                const data = snapshot.val();
-                if (data === null) {
-                    await set(store.getState().Categories.dbReference!, store.getState().Categories.categories);
-                } else {
-                    dispatch(categoriesSlice.actions.setCategories(data));
-                }
-            });
-        } catch (error) {
-            console.error("Categories Coonect error");
         }
     }
 

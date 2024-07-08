@@ -1,8 +1,8 @@
-import { PayloadAction, configureStore, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, configureStore, createSelector, createSlice } from "@reduxjs/toolkit";
 import { AuthStatus, Categories, CategoriesState, Category, Outlay, OutlayType, Outlays, OutlaysState, UserState } from "./Store.types";
 import { useDispatch, useSelector } from "react-redux";
-import { firebaseDb } from "../firebase/firebaseAPI";
-import { child, ref } from "firebase/database";
+import { child, onValue, push, ref, set } from "firebase/database";
+import { firebaseDb } from "../components/App/App";
 
 const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,
@@ -99,38 +99,7 @@ export const outlaysSlice = createSlice({
         }
     },
     selectors: {
-        dbReference: (state) => { return state.dbReference },
-        filterOutlays: (state, filter: string, params?: any) => {
-            switch (filter) {
-                case "lastMonth": {
-                    const monthAgo = new Date();
-                    monthAgo.setMonth(monthAgo.getMonth() - 1);
-                    return Object.keys(state.outlays).map((key) => state.outlays[key])
-                        .filter(outlay => new Date(outlay.date) > monthAgo)
-                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-                }
-                case "betweenTwoDates": {
-                    return Object.keys(state.outlays).map((key) => state.outlays[key])
-                        .filter(outlay => new Date(outlay.date) >= new Date(params.startDate) && new Date(outlay.date) <= new Date(params.endDate))
-                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-                }
-                case "lastWeek":
-                default: {
-                    const weekAgo = new Date();
-                    weekAgo.setDate(weekAgo.getDate() - 7);
-                    return Object.keys(state.outlays).map((key) => state.outlays[key])
-                        .filter(outlay => new Date(outlay.date) > weekAgo)
-                        .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-                }
-            }
-        },
-        getAllFilters: (state) => {
-            return [
-                { title: "Last Week", filterName: "lastWeek" },
-                { title: "Last Month", filterName: "lastMonth" },
-                { title: "Between Two date", filterName: "betweenTwoDates" }
-            ];
-        }
+        dbReference: (state) => { return state.dbReference }
     }
 })
 
@@ -174,10 +143,57 @@ export const store = configureStore({
     },
 })
 
+export async function dbConnect(userState: UserState) {
+    try {
+        store.dispatch(outlaysSlice.actions.connect(userState));
+        onValue(store.getState().Outlays.dbReference!, (snapshot) => {
+            const data = snapshot.val();
+            if (data === null) {
+                push(store.getState().Outlays.dbReference!, {});
+                store.dispatch(outlaysSlice.actions.outlaySet({}));
+            } else {
+                store.dispatch(outlaysSlice.actions.outlaySet(data));
+            }
+        });
+    } catch (error) {
+        console.error("Coonect error");
+    }
+}
+
+export async function categoriesConnect(userState: UserState) {
+    try {
+        store.dispatch(categoriesSlice.actions.connect(userState));
+        onValue(store.getState().Categories.dbReference!, async (snapshot) => {
+            const data = snapshot.val();
+            if (data === null) {
+                await set(store.getState().Categories.dbReference!, store.getState().Categories.categories);
+            } else {
+                store.dispatch(categoriesSlice.actions.setCategories(data));
+            }
+        });
+    } catch (error) {
+        console.error("Categories Coonect error");
+    }
+}
+
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
+export const createAppSelector = createSelector.withTypes<RootState>();
+
+export const filterOutlays = createAppSelector(
+    [
+        (state) => { return state.Outlays.outlays },
+        (state, startDate: string) => { return startDate },
+        (state, startDate: string, endDate: string) => { return endDate }
+    ],
+    (outlays: Outlays, startDate: string, endDate: string) => {
+        return Object.keys(outlays).map((key) => outlays[key])
+                    .filter(outlay => new Date(outlay.date) >= new Date(startDate) && new Date(outlay.date) <= new Date(endDate))
+                    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+    }
+)

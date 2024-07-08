@@ -5,6 +5,9 @@ import OutlayTable from "../OutlayTable/OutlayTable";
 import AddOutlay from "./AddOutlay/AddOutlay";
 
 export default function () {
+    const today = new Date();
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
     const isAuth = useAppSelector(userSlice.selectors.isAuth);
 
     if (!isAuth) {
@@ -22,7 +25,7 @@ export default function () {
     return (
         <>
             <AddOutlay />
-            <OutlayTable filter="lastWeek"/>
+            <OutlayTable startDate={lastWeek.toISOString()} endDate={today.toISOString()} />
         </>
     );
 }

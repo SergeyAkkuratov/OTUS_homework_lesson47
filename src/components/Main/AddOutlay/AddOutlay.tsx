@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { OutlayType } from "../../../store/Store.types";
-import { getCategories } from "../../../firebase/firebaseAPI";
 import { categoriesSlice, outlaysSlice, useAppSelector } from "../../../store/Store";
 import { push, set } from "firebase/database";
 

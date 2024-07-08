@@ -1,24 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import { Chart } from "react-google-charts";
-import { categoriesSlice, outlaysSlice, store, useAppSelector } from "../../store/Store";
+import { categoriesSlice, filterOutlays, store } from "../../store/Store";
 import { OutlayType } from "../../store/Store.types";
 import { useSearchParams } from "react-router-dom";
 import OutlayTable from "../OutlayTable/OutlayTable";
 
+function formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
 export default function Statistic() {
-    const defaultFilters = useAppSelector(outlaysSlice.selectors.getAllFilters)
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [currentFilter, setCurrentFilter] = useState({
-        ...defaultFilters[0]
-    });
-    const [datesParams, setDatesParams] = useState({
-        startDate: "",
-        endDate: ""
-    });
+    const defaultFilters = ["LastWeek", "LastMonth", "BetweenTwoDates"];
+    const today = new Date();
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    // 2024-07-01T16:25
+    // 2024-06-08T13:25:28.781Z
+    const [searchParams, setSearchParams] = useSearchParams([
+        ["filter", "LastWeek"],
+        ["startDate", formatDate(lastWeek)],
+        ["endDate", formatDate(today)],
+        ["isChart", "false"]
+    ]);
 
     function getData() {
         const result: { [id: string]: number } = {};
-        outlaysSlice.selectors.filterOutlays(store.getState(), currentFilter.filterName, datesParams).forEach((outLay) => {
+        filterOutlays(store.getState(), searchParams.get("startDate")!, searchParams.get("endDate")!).forEach((outLay) => {
             if (outLay.type === OutlayType.OUTLAY) {
                 const sum = outLay.sum;
                 const category = categoriesSlice.selectors.highestCategoryName(store.getState(), outLay.category);
@@ -34,7 +50,7 @@ export default function Statistic() {
     }
 
     const handleChangeChart = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {checked} = event.target;
+        const { checked } = event.target;
         setSearchParams(params => {
             params.set("isChart", `${checked}`);
             return params;
@@ -42,23 +58,39 @@ export default function Statistic() {
     };
 
     const handleRadioButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value, innerHTML } = event.target;
-        setCurrentFilter({
-            filterName: value,
-            title: innerHTML,
-        });
-        setSearchParams(params => {
-            params.set("filter", JSON.stringify(currentFilter));
-            return params;
-        });
+        const { value } = event.target;
+        switch (value) {
+            case "LastWeek": {
+                setSearchParams(params => {
+                    params.set("filter", value);
+                    params.set("startDate", formatDate(lastWeek));
+                    params.set("endDate", formatDate(today));
+                    return params;
+                });
+                break;
+            }
+            case "LastMonth": {
+                setSearchParams(params => {
+                    params.set("filter", value);
+                    params.set("startDate", formatDate(lastMonth));
+                    params.set("endDate", formatDate(today));
+                    return params;
+                });
+                break;
+            }
+            default: {
+                setSearchParams(params => {
+                    params.set("filter", value);
+                    return params;
+                });
+                break;
+            }
+        }
+
     };
 
     const handleChangeDates = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = event.target;
-        setDatesParams((prevState) =>({
-            ...prevState,
-            [id]: value
-        }))
         setSearchParams(params => {
             params.set(id, value);
             return params;
@@ -74,33 +106,32 @@ export default function Statistic() {
                 </div>
                 <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
                     {defaultFilters.map((filter, index) => {
-                        return <>
-                            <input key={index} type="radio" className="btn-check" name="filterRadio" id={`filterRadio${index}`} autoComplete="off" value={filter.filterName} checked={filter.filterName === currentFilter.filterName} onChange={handleRadioButtonChange} />
-                            <label className="btn btn-outline-primary" htmlFor={`filterRadio${index}`}>{filter.title}</label>
-                        </>
+                        return <div key={index}>
+                            <input key={`input-${index}`} type="radio" className="btn-check" name="filterRadio" id={`filterRadio${index}`} autoComplete="off" value={filter} checked={searchParams.has("filter", filter)} onChange={handleRadioButtonChange} />
+                            <label key={`label-${index}`} className="btn btn-outline-primary" htmlFor={`filterRadio${index}`}>{filter}</label>
+                        </div>
                     })}
                 </div>
-                { currentFilter.filterName === "betweenTwoDates" ? (<>
+                {searchParams.has("filter", "BetweenTwoDates") ? (<>
                     <div>
                         <label htmlFor="startDate" className="form-label mt-1">Start Date</label>
-                        <input type="datetime-local" className="form-control" id="startDate" value={datesParams.startDate} onChange={handleChangeDates} />
+                        <input type="datetime-local" className="form-control" id="startDate" value={searchParams.get("startDate")!} onChange={handleChangeDates} />
                     </div>
                     <div>
                         <label htmlFor="endDate" className="form-label mt-1">End Date</label>
-                        <input type="datetime-local" className="form-control" id="endDate" value={datesParams.endDate} onChange={handleChangeDates} />
+                        <input type="datetime-local" className="form-control" id="endDate" value={searchParams.get("endDate")!} onChange={handleChangeDates} />
                     </div>
                 </>) : (<></>)}
             </fieldset>
             {searchParams.get("isChart") === "true" ? (
-                <OutlayTable filter={currentFilter.filterName} params={datesParams} />
-            ) : (
                 <Chart
                     chartType="PieChart"
                     data={getData()}
-                    options={{title: `My ${currentFilter.title} outlays`}}
                     width={"100%"}
                     height={"400px"}
                 />
+            ) : (
+                <OutlayTable startDate={searchParams.get("startDate")!} endDate={searchParams.get("endDate")!} />
             )}
         </>
     );

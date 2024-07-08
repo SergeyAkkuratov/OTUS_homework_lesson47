@@ -2,7 +2,7 @@ import { PayloadAction, configureStore, createSelector, createSlice } from "@red
 import { AuthStatus, Categories, CategoriesState, Category, Outlay, OutlayType, Outlays, OutlaysState, UserState } from "./Store.types";
 import { useDispatch, useSelector } from "react-redux";
 import { child, onValue, push, ref, set } from "firebase/database";
-import { firebaseDb } from "../components/App/App";
+import { firebaseDb } from "../App";
 
 const initialUserState: UserState = {
     status: AuthStatus.NOT_DONE,

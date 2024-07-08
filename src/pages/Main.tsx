@@ -1,8 +1,8 @@
 import React from "react";
-import { outlaysSlice, useAppSelector, userSlice } from "../../store/Store";
+import { outlaysSlice, useAppSelector, userSlice } from "../store/Store";
 import { Link } from "react-router-dom";
-import OutlayTable from "../OutlayTable/OutlayTable";
-import AddOutlay from "./AddOutlay/AddOutlay";
+import OutlayTable from "../components/OutlayTable/OutlayTable";
+import AddOutlay from "../components/AddOutlay/AddOutlay";
 
 export default function () {
     const today = new Date();

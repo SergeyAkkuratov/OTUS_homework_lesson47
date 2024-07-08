@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { outlaysSlice, useAppDispatch, useAppSelector, userSlice } from "../../store/Store";
+import { outlaysSlice, useAppDispatch, useAppSelector, userSlice } from "../store/Store";
 import { signOut } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { firebaseAuth } from "../App/App";
+import { firebaseAuth } from "../App";
 
 export function User() {
     const userState = useAppSelector((state) => state.User);

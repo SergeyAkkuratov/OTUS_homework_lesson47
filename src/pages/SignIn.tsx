@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { categoriesConnect, dbConnect, useAppDispatch, userSlice } from "../../store/Store";
-import { AuthStatus, UserState } from "../../store/Store.types";
+import { categoriesConnect, dbConnect, useAppDispatch, userSlice } from "../store/Store";
+import { AuthStatus, UserState } from "../store/Store.types";
 import { useNavigate } from "react-router-dom";
 import { browserLocalPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth } from "../App/App";
+import { firebaseAuth } from "../App";
 
 export default function SingIn() {
     const dispatch = useAppDispatch();

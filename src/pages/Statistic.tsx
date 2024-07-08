@@ -1,10 +1,10 @@
 import React from "react";
 import { Chart } from "react-google-charts";
-import { categoriesSlice, filterOutlays, store, useAppSelector, userSlice } from "../../store/Store";
-import { OutlayType } from "../../store/Store.types";
+import { categoriesSlice, filterOutlays, store, useAppSelector, userSlice } from "../store/Store";
+import { OutlayType } from "../store/Store.types";
 import { useSearchParams } from "react-router-dom";
-import OutlayTable from "../OutlayTable/OutlayTable";
-import { formatDate } from "../../helpers";
+import OutlayTable from "../components/OutlayTable/OutlayTable";
+import { formatDate } from "../helpers";
 
 export default function Statistic() {
     const defaultFilters = ["LastWeek", "LastMonth", "BetweenTwoDates"];

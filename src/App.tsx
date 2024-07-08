@@ -4,16 +4,16 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database"
 import "bootswatch/dist/darkly/bootstrap.min.css";
-import { User } from "../User/User";
-import Main from "../Main/Main";
-import { categoriesConnect, dbConnect, useAppDispatch, useAppSelector, userSlice } from "../../store/Store";
-import { AuthStatus, UserState } from "../../store/Store.types";
+import { User } from "./pages/User";
+import Main from "./pages/Main";
+import { categoriesConnect, dbConnect, useAppDispatch, useAppSelector, userSlice } from "./store/Store";
+import { AuthStatus, UserState } from "./store/Store.types";
 
-const About = React.lazy(() => import("../About/About"));
-const SignIn = React.lazy(() => import("../SignIn/SignIn"));
-const Header = React.lazy(() => import("../Header/Header"));
-const Categories = React.lazy(() => import("../Categories/Categories"));
-const Statistic = React.lazy(() => import("../Statistic/Statistic"));
+const About = React.lazy(() => import("./pages/About"));
+const SignIn = React.lazy(() => import("./pages/SignIn"));
+const Header = React.lazy(() => import("./components/Header/Header"));
+const Categories = React.lazy(() => import("./pages/Categories"));
+const Statistic = React.lazy(() => import("./pages/Statistic"));
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

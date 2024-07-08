@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { OutlayType } from "../../../store/Store.types";
-import { listOfCategories, outlayDbReference, outlaysSlice, useAppSelector } from "../../../store/Store";
+import { OutlayType } from "../../store/Store.types";
+import { listOfCategories, outlayDbReference, outlaysSlice, useAppSelector } from "../../store/Store";
 import { push, set } from "firebase/database";
-import { formatDate } from "../../../helpers";
+import { formatDate } from "../../helpers";
 
 export default function AddOutlay() {
     const dbRef = useAppSelector(outlayDbReference);

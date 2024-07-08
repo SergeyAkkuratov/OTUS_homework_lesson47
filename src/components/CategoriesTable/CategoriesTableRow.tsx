@@ -1,7 +1,8 @@
 import React from "react";
-import { Category, Outlay, OutlayType } from "../../../store/Store.types";
+import { Category } from "../../store/Store.types";
+import { categoriesDbReference, categoriesSlice, store, useAppSelector } from "../../store/Store";
 import { child, set } from "firebase/database";
-import { categoriesDbReference, categoriesSlice, store, useAppSelector } from "../../../store/Store";
+
 
 export type CategoriesTableRowProps = {
     data: Category;

@@ -34,9 +34,6 @@ jobs:
             - name: Test check
               run: |
                   npm run test
-            - name: Build Storybook
-              run: |
-                  npm run build-storybook
             - name: Setup Pages
               uses: actions/configure-pages@v4
             - name: Upload artifact

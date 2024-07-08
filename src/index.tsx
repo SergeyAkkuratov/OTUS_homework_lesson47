@@ -6,7 +6,6 @@ import { store } from "./store/Store";
 
 import App from "./App";
 
-console.log(`PREFIX="${PREFIX}"`);
 const root = createRoot(document.getElementById("app")!);
 root.render(
     <>

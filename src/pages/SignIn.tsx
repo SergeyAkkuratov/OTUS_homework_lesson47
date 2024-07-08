@@ -36,7 +36,7 @@ export default function SingIn() {
             dispatch(userSlice.actions.successAuth(newUserState));
             await dbConnect();
             await categoriesConnect();
-            navigate("/");
+            navigate(`${PREFIX}/`);
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);

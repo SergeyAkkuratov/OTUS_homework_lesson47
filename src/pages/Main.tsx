@@ -16,7 +16,7 @@ export default function Main() {
                 <div className="alert alert-dismissible alert-warning">
                     <h4 className="alert-heading">Warning!</h4>
                     <p className="mb-0">While you aren't sign in, you couldn't use this application!</p>
-                    <Link className="nav-link" to="/signin">
+                    <Link className="nav-link" to={`${PREFIX}/signin`}>
                         SingIn
                     </Link>
                 </div>

@@ -14,7 +14,7 @@ export default function User() {
         try {
             await signOut(firebaseAuth);
             dispatch(userSlice.actions.signOut());
-            navigate("/");
+            navigate(`${PREFIX}/`);
         } catch (error) {
             if (error instanceof FirebaseError) {
                 // eslint-disable-next-line no-console

@@ -4,9 +4,10 @@ import "@testing-library/jest-dom";
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter } from "react-router-dom";
-import Header from "./Header";
 import { initialCategories, initialOutlaysState, initialUserState, RootState } from "../../store/Store";
 import { AuthStatus } from "../../store/StoreTypes";
+
+import Header from "./Header";
 
 
 describe("Header", () => {

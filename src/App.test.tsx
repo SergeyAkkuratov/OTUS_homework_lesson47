@@ -65,6 +65,7 @@ describe("App", () => {
         await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkAbout"));
+        await screen.findByTestId("linkAbout");
         expect(screen.getByTestId("about-message")).toBeInTheDocument();
     });
 
@@ -83,6 +84,8 @@ describe("App", () => {
         await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkCategories"));
+
+        await screen.findByTestId("cat-table");
         expect(screen.getByTestId("cat-table")).toBeInTheDocument();
     });
 
@@ -101,6 +104,7 @@ describe("App", () => {
         await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkStatistic"));
+        await screen.findByTestId("statisticForm");
         expect(screen.getByTestId("statisticForm")).toBeInTheDocument();
     });
 
@@ -119,6 +123,7 @@ describe("App", () => {
         await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkUser"));
+        await screen.findByTestId("user-label");
         expect(screen.getByTestId("user-label")).toBeInTheDocument();
     });
 });

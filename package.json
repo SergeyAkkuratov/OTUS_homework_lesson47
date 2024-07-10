@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "ДЗ для лекции \"Роутинг и ленивая загрузка страниц при работе с React\"",
     "scripts": {
-        "test": "tsc --noEmit && jest --passWithNoTests --coverage",
+        "test": "tsc --noEmit && jest --coverage",
         "lint": "prettier --check . && eslint . --ext .js,.ts",
         "lint:fix": "prettier --write . && eslint . --fix",
         "build": "webpack --mode production",

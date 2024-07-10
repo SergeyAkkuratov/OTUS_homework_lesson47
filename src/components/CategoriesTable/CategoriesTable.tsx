@@ -6,7 +6,7 @@ export default function CategoriesTable() {
     const categories = useAppSelector(listOfCategories);
     return (
         <>
-            <table className="table table-hover" data-bs-spy="scroll">
+            <table className="table table-hover" data-bs-spy="scroll" data-testid="cat-table">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>

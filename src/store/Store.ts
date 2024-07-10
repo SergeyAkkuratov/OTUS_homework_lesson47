@@ -4,6 +4,7 @@
 import { PayloadAction, configureStore, createSelector, createSlice } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { child, DatabaseReference, DataSnapshot, onValue, push, ref, set } from "firebase/database";
+import { User } from "firebase/auth";
 import { AuthStatus, Categories, CategoriesState, IOnValueFunction, Outlays, OutlaysState, UserState } from "./StoreTypes";
 import { firebaseDb } from "../App";
 
@@ -70,8 +71,7 @@ export const userSlice = createSlice({
         }),
     },
     selectors: {
-        isAuth: (state) => state.status === AuthStatus.DONE,
-        userUID: (state) => state.uid,
+        isAuth: (state) => state.status === AuthStatus.DONE
     },
 });
 
@@ -80,11 +80,7 @@ export const outlaysSlice = createSlice({
     initialState: initialOutlaysState,
     reducers: {
         outlaySet: (state, action: PayloadAction<Outlays>) => {
-            if (action.payload !== null) {
-                state.outlays = action.payload;
-            } else {
-                state.outlays = {};
-            }
+            state.outlays = action.payload;
         },
     },
 });
@@ -148,7 +144,7 @@ export const listOfCategories = createAppSelector([(state) => state.Categories.c
 export async function setOutlays(dbRef: DatabaseReference, snapshot: DataSnapshot) {
     const data = snapshot.val();
     if (data === null) {
-        push(dbRef, {});
+        await push(dbRef, {});
         store.dispatch(outlaysSlice.actions.outlaySet({}));
     } else {
         store.dispatch(outlaysSlice.actions.outlaySet(data));
@@ -169,5 +165,20 @@ export async function dbConnect(dbRef: DatabaseReference, onValueFunction: IOnVa
         onValue(dbRef, (snapshot) => onValueFunction(dbRef, snapshot));
     } catch (error) {
         console.error(`Coonect error: ${error}`);
+    }
+}
+
+export async function onUserConnect(user: User | null) {
+    if (user) {
+        if (!userSlice.selectors.isAuth(store.getState())) {
+            const newUserState: UserState = {
+                status: AuthStatus.DONE,
+                email: user.email,
+                uid: user.uid,
+            };
+            store.dispatch(userSlice.actions.successAuth(newUserState));
+            await dbConnect(outlayDbReference(store.getState())!, setOutlays);
+            await dbConnect(categoriesDbReference(store.getState())!, setCategories);
+        }
     }
 }

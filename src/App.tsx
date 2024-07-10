@@ -1,21 +1,10 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+import { onUserConnect, useAppSelector,  userSlice } from "./store/Store";
 import "bootswatch/dist/darkly/bootstrap.min.css";
-import {
-    categoriesDbReference,
-    dbConnect,
-    outlayDbReference,
-    setCategories,
-    setOutlays,
-    store,
-    useAppDispatch,
-    useAppSelector,
-    userSlice,
-} from "./store/Store";
-import { AuthStatus, UserState } from "./store/StoreTypes";
 
 const Main = React.lazy(() => import("./pages/Main"));
 const About = React.lazy(() => import("./pages/About"));
@@ -36,29 +25,14 @@ const firebaseConfig = {
     appId: "1:141496007785:web:2ce0d5a5af8b9cf1e6b6f8",
 };
 
-const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseAuth = getAuth(firebaseApp);
+onAuthStateChanged(firebaseAuth, (user) => onUserConnect(user));
 export const firebaseDb = getDatabase(firebaseApp);
 
 export default function App() {
     const isAuth = useAppSelector(userSlice.selectors.isAuth);
-    const dispatch = useAppDispatch();
-
-    onAuthStateChanged(firebaseAuth, async (user) => {
-        if (user) {
-            if (!isAuth) {
-                const newUserState: UserState = {
-                    status: AuthStatus.DONE,
-                    email: user.email,
-                    uid: user.uid,
-                };
-                dispatch(userSlice.actions.successAuth(newUserState));
-                await dbConnect(outlayDbReference(store.getState())!, setOutlays);
-                await dbConnect(categoriesDbReference(store.getState())!, setCategories);
-            }
-        }
-    });
 
     return (
         <>

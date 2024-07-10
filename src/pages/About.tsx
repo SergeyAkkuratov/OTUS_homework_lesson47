@@ -5,7 +5,7 @@ export default function About() {
     return (
         <>
             <h3>About:</h3>
-            <p>Outlays - Web React application, providing functionality to store money incomes and outlays to control youe budget.</p>
+            <p data-testid="about-message">Outlays - Web React application, providing functionality to store money incomes and outlays to control youe budget.</p>
             <h4>Pages:</h4>
             <p>
                 <Link to={`${PREFIX}/`}>Main</Link> - you go to this page after sign in. You could add outlays and incomes by form fields and see

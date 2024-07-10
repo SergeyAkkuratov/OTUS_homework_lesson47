@@ -157,7 +157,7 @@ export default function Statistic() {
                 )}
             </fieldset>
             {searchParams.get("isChart") === "true" ? (
-                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} options={{title:"Pie Chart"}}/>
+                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} options={{ title: "Pie Chart" }} />
             ) : (
                 <OutlayTable startDate={searchParams.get("startDate")!} endDate={searchParams.get("endDate")!} />
             )}

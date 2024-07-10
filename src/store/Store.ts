@@ -3,8 +3,8 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, configureStore, createSelector, createSlice } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { child, onValue, push, ref, set } from "firebase/database";
-import { AuthStatus, Categories, CategoriesState, Outlays, OutlaysState, UserState } from "./StoreTypes";
+import { child, DatabaseReference, DataSnapshot, onValue, push, ref, set } from "firebase/database";
+import { AuthStatus, Categories, CategoriesState, IOnValueFunction, Outlays, OutlaysState, UserState } from "./StoreTypes";
 import { firebaseDb } from "../App";
 
 export const initialUserState: UserState = {
@@ -145,32 +145,28 @@ export const listOfCategories = createAppSelector([(state) => state.Categories.c
     Object.keys(categories).map((key) => categories[key])
 );
 
-export async function dbConnect() {
-    try {
-        onValue(outlayDbReference(store.getState())!, (snapshot) => {
-            const data = snapshot.val();
-            if (data === null) {
-                push(outlayDbReference(store.getState())!, {});
-                store.dispatch(outlaysSlice.actions.outlaySet({}));
-            } else {
-                store.dispatch(outlaysSlice.actions.outlaySet(data));
-            }
-        });
-    } catch (error) {
-        console.error(`Coonect error: ${error}`);
+export async function setOutlays(dbRef: DatabaseReference, snapshot: DataSnapshot) {
+    const data = snapshot.val();
+    if (data === null) {
+        push(dbRef, {});
+        store.dispatch(outlaysSlice.actions.outlaySet({}));
+    } else {
+        store.dispatch(outlaysSlice.actions.outlaySet(data));
     }
 }
 
-export async function categoriesConnect() {
+export async function setCategories(dbRef: DatabaseReference, snapshot: DataSnapshot) {
+    const data = snapshot.val();
+    if (data === null) {
+        await set(dbRef, store.getState().Categories.categories);
+    } else {
+        store.dispatch(categoriesSlice.actions.setCategories(data));
+    }
+}
+
+export async function dbConnect(dbRef: DatabaseReference, onValueFunction: IOnValueFunction) {
     try {
-        onValue(categoriesDbReference(store.getState())!, async (snapshot) => {
-            const data = snapshot.val();
-            if (data === null) {
-                await set(categoriesDbReference(store.getState())!, store.getState().Categories.categories);
-            } else {
-                store.dispatch(categoriesSlice.actions.setCategories(data));
-            }
-        });
+        onValue(dbRef, (snapshot) => onValueFunction(dbRef, snapshot));
     } catch (error) {
         console.error(`Coonect error: ${error}`);
     }

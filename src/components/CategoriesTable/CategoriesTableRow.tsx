@@ -1,5 +1,5 @@
 import React from "react";
-import { child, set } from "firebase/database";
+import { child, remove } from "firebase/database";
 import { Category } from "../../store/StoreTypes";
 import { categoriesDbReference, categoriesSlice, store, useAppSelector } from "../../store/Store";
 
@@ -13,7 +13,7 @@ export default function CategoriesTableRow(props: CategoriesTableRowProps) {
     async function deleteCategory() {
         // eslint-disable-next-line no-alert, no-restricted-globals
         if (confirm(`Are you shure want to delete this Categpory: ${props.data.name}?`)) {
-            await set(child(categoriesDbReference(store.getState())!, props.data.id), null);
+            await remove(child(categoriesDbReference(store.getState())!, props.data.id));
         }
     }
 

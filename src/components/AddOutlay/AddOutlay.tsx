@@ -48,7 +48,14 @@ export default function AddOutlay() {
                         <label htmlFor="date" className="form-label mt-1">
                             Date
                         </label>
-                        <input type="datetime-local" className="form-control" id="date" value={formData.date} onChange={handleChange} data-testid="inputDate" />
+                        <input
+                            type="datetime-local"
+                            className="form-control"
+                            id="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            data-testid="inputDate"
+                        />
                     </div>
                     <div>
                         <label htmlFor="sum" className="form-label mt-1">
@@ -56,7 +63,15 @@ export default function AddOutlay() {
                         </label>
                         <div className="input-group">
                             <span className="input-group-text">$</span>
-                            <input type="number" className="form-control" aria-label="Amount" id="sum" value={formData.sum} onChange={handleChange} data-testid="inputSum"/>
+                            <input
+                                type="number"
+                                className="form-control"
+                                aria-label="Amount"
+                                id="sum"
+                                value={formData.sum}
+                                onChange={handleChange}
+                                data-testid="inputSum"
+                            />
                         </div>
                     </div>
                     <div>
@@ -75,7 +90,14 @@ export default function AddOutlay() {
                         <label htmlFor="comment" className="form-label mt-1">
                             Comment
                         </label>
-                        <textarea className="form-control" id="comment" rows={3} value={formData.comment} onChange={handleChange} data-testid="textAreaComment"></textarea>
+                        <textarea
+                            className="form-control"
+                            id="comment"
+                            rows={3}
+                            value={formData.comment}
+                            onChange={handleChange}
+                            data-testid="textAreaComment"
+                        ></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary mt-2" data-testid="buttonSubmit">
                         Add {formData.type}

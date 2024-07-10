@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { browserLocalPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
-import { categoriesConnect, dbConnect, useAppDispatch, userSlice } from "../store/Store";
+import { categoriesDbReference, dbConnect, outlayDbReference, setCategories, setOutlays, store, useAppDispatch, userSlice } from "../store/Store";
 import { AuthStatus, UserState } from "../store/StoreTypes";
 import { firebaseAuth } from "../App";
 
@@ -34,8 +34,8 @@ export default function SingIn() {
                 uid: userCredential.user.uid,
             };
             dispatch(userSlice.actions.successAuth(newUserState));
-            await dbConnect();
-            await categoriesConnect();
+            await dbConnect(outlayDbReference(store.getState())!, setOutlays);
+            await dbConnect(categoriesDbReference(store.getState())!, setCategories);
             navigate(`${PREFIX}/`);
         } catch (error) {
             // eslint-disable-next-line no-console
@@ -55,7 +55,7 @@ export default function SingIn() {
                 <fieldset>
                     <div>
                         <label htmlFor="email" className="form-label mt-1">
-                            Login
+                            Email
                         </label>
                         <input
                             type="text"
@@ -64,6 +64,7 @@ export default function SingIn() {
                             aria-describedby="loginHelp"
                             placeholder="Enter login"
                             onChange={handleChange}
+                            data-testid="emailInput"
                         />
                     </div>
                     <div className="mb3">
@@ -77,9 +78,10 @@ export default function SingIn() {
                             placeholder="Password"
                             autoComplete="off"
                             onChange={handleChange}
+                            data-testid="passwordInput"
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-2 me-sm-2">
+                    <button type="submit" className="btn btn-primary mt-2 me-sm-2" data-testid="buttonSubmit">
                         Sign in
                     </button>
                     <button type="button" className="btn btn-secondary mt-2" onClick={() => signInOrUp(createUserWithEmailAndPassword)}>

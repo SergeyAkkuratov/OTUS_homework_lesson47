@@ -11,7 +11,7 @@ export default function OutlayTable(props: OutlayTableProps) {
     const outlays = useAppSelector((state) => filterOutlays(state, props.startDate, props.endDate));
     return (
         <>
-            <table className="table table-hover" data-bs-spy="scroll">
+            <table className="table table-hover" data-bs-spy="scroll" data-testid="outlayTable">
                 <thead>
                     <tr>
                         <th scope="col">Type</th>

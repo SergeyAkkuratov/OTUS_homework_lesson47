@@ -61,7 +61,7 @@ export default function Header() {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/signin`}>
+                                        <Link className="nav-link" to={`${PREFIX}/signin`} data-testid="signin-link">
                                             SignIn
                                         </Link>
                                     </li>

@@ -1,3 +1,5 @@
+import { DatabaseReference, DataSnapshot } from "firebase/database";
+
 export enum OutlayType {
     OUTLAY = "OUTLAY",
     INCOME = "INCOME",
@@ -44,4 +46,8 @@ export interface OutlaysState {
 
 export interface CategoriesState {
     categories: Categories;
+}
+
+export interface IOnValueFunction {
+    (dbRef: DatabaseReference, snapshot: DataSnapshot): Promise<void>;
 }

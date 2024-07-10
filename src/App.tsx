@@ -1,10 +1,20 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { initializeApp } from "firebase/app";
+import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import "bootswatch/dist/darkly/bootstrap.min.css";
-import { categoriesConnect, dbConnect, useAppDispatch, useAppSelector, userSlice } from "./store/Store";
+import {
+    categoriesDbReference,
+    dbConnect,
+    outlayDbReference,
+    setCategories,
+    setOutlays,
+    store,
+    useAppDispatch,
+    useAppSelector,
+    userSlice,
+} from "./store/Store";
 import { AuthStatus, UserState } from "./store/StoreTypes";
 
 const Main = React.lazy(() => import("./pages/Main"));
@@ -26,7 +36,7 @@ const firebaseConfig = {
     appId: "1:141496007785:web:2ce0d5a5af8b9cf1e6b6f8",
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseDb = getDatabase(firebaseApp);
@@ -44,8 +54,8 @@ export default function App() {
                     uid: user.uid,
                 };
                 dispatch(userSlice.actions.successAuth(newUserState));
-                await dbConnect();
-                await categoriesConnect();
+                await dbConnect(outlayDbReference(store.getState())!, setOutlays);
+                await dbConnect(categoriesDbReference(store.getState())!, setCategories);
             }
         }
     });

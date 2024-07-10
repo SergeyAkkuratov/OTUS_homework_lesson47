@@ -47,7 +47,7 @@ describe("App", () => {
         expect(screen.getByTestId("sginin-form")).toBeInTheDocument();
     });
 
-    it("should showd load each page", async () => {
+    it("should showd load About page", async () => {
         initialState.User.status = AuthStatus.DONE;
         store = mockStore(initialState);
         await act(async () => {
@@ -65,12 +65,54 @@ describe("App", () => {
 
         await userEvent.click(screen.getByTestId("linkAbout"));
         expect(screen.getByTestId("about-message")).toBeInTheDocument();
+    });
+
+    it("should showd load Categories page", async () => {
+        initialState.User.status = AuthStatus.DONE;
+        store = mockStore(initialState);
+        await act(async () => {
+            render(
+                <Provider store={store}>
+                    <MemoryRouter>
+                        <App />
+                    </MemoryRouter>
+                </Provider>
+            );
+        });
 
         await userEvent.click(screen.getByTestId("linkCategories"));
         expect(screen.getByTestId("cat-table")).toBeInTheDocument();
+    });
+
+    it("should showd load Statistic page", async () => {
+        initialState.User.status = AuthStatus.DONE;
+        store = mockStore(initialState);
+        await act(async () => {
+            render(
+                <Provider store={store}>
+                    <MemoryRouter>
+                        <App />
+                    </MemoryRouter>
+                </Provider>
+            );
+        });
 
         await userEvent.click(screen.getByTestId("linkStatistic"));
-        expect(screen.getByTestId("stat-form")).toBeInTheDocument();
+        expect(screen.getByTestId("statisticForm")).toBeInTheDocument();
+    });
+
+    it("should showd load User page", async () => {
+        initialState.User.status = AuthStatus.DONE;
+        store = mockStore(initialState);
+        await act(async () => {
+            render(
+                <Provider store={store}>
+                    <MemoryRouter>
+                        <App />
+                    </MemoryRouter>
+                </Provider>
+            );
+        });
 
         await userEvent.click(screen.getByTestId("linkUser"));
         expect(screen.getByTestId("user-label")).toBeInTheDocument();

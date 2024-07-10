@@ -3,10 +3,12 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import configureStore, { MockStoreEnhanced } from "redux-mock-store";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 import { initialCategories, initialOutlaysState, RootState } from "./store/Store";
 import { AuthStatus, CategoriesState, OutlaysState, UserState } from "./store/StoreTypes";
 import App from "./App";
+
 
 describe("App", () => {
     const initialState: RootState = {
@@ -33,29 +35,46 @@ describe("App", () => {
         await act(async () => {
             render(
                 <Provider store={store}>
-                    <BrowserRouter>
+                    <MemoryRouter>
                         <App />
-                    </BrowserRouter>
+                    </MemoryRouter>
                 </Provider>
             );
         });
         const linkList = screen.getByTestId("linkList");
         expect(linkList.children.length).toBe(3);
+
+        await userEvent.click(screen.getByTestId("linkSignin"));
+        expect(screen.getByTestId("sginin-form")).toBeInTheDocument();
     });
 
-    it("should showd have 5 routes", async () => {
+    it("should showd load each page", async () => {
         initialState.User.status = AuthStatus.DONE;
         store = mockStore(initialState);
         await act(async () => {
             render(
                 <Provider store={store}>
-                    <BrowserRouter>
+                    <MemoryRouter>
                         <App />
-                    </BrowserRouter>
+                    </MemoryRouter>
                 </Provider>
             );
         });
+
         const linkList = screen.getByTestId("linkList");
         expect(linkList.children.length).toBe(5);
+
+
+        await userEvent.click(screen.getByTestId("linkAbout"));
+        expect(screen.getByTestId("about-message")).toBeInTheDocument();
+        
+        await userEvent.click(screen.getByTestId("linkCategories"));
+        expect(screen.getByTestId("cat-table")).toBeInTheDocument();
+        
+        await userEvent.click(screen.getByTestId("linkStatistic"));
+        expect(screen.getByTestId("stat-form")).toBeInTheDocument();
+        
+        await userEvent.click(screen.getByTestId("linkUser"));
+        expect(screen.getByTestId("user-label")).toBeInTheDocument();
     });
 });

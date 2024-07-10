@@ -25,7 +25,7 @@ export default function User() {
 
     return (
         <>
-            <legend>Sign in user:</legend>
+            <legend data-testid="user-label">Sign in user:</legend>
             <div className="row">
                 <label htmlFor="staticEmail" className="col-sm-2 col-form-label">
                     Email

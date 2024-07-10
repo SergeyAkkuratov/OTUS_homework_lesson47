@@ -33,22 +33,22 @@ export default function Header() {
                             {isAuth ? (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/categories`}>
+                                        <Link className="nav-link" to={`${PREFIX}/categories`} data-testid="linkCategories">
                                             Categories
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/statistic`}>
+                                        <Link className="nav-link" to={`${PREFIX}/statistic`} data-testid="linkStatistic">
                                             Statistic
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/about`}>
+                                        <Link className="nav-link" to={`${PREFIX}/about`} data-testid="linkAbout">
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/user`}>
+                                        <Link className="nav-link" to={`${PREFIX}/user`} data-testid="linkUser">
                                             <span className="badge bg-success">{userEmail}</span>
                                         </Link>
                                     </li>
@@ -56,12 +56,12 @@ export default function Header() {
                             ) : (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/about`}>
+                                        <Link className="nav-link" to={`${PREFIX}/about`} data-testid="linkAbout">
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/signin`} data-testid="signin-link">
+                                        <Link className="nav-link" to={`${PREFIX}/signin`} data-testid="linkSignin">
                                             SignIn
                                         </Link>
                                     </li>

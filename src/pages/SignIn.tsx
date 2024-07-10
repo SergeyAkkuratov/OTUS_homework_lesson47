@@ -51,6 +51,7 @@ export default function SingIn() {
                     event.preventDefault();
                     signInOrUp(signInWithEmailAndPassword);
                 }}
+                data-testid="sginin-form"
             >
                 <fieldset>
                     <div>

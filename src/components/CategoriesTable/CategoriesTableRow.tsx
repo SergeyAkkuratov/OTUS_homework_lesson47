@@ -23,7 +23,7 @@ export default function CategoriesTableRow(props: CategoriesTableRowProps) {
                 <th scope="row">{props.data.name}</th>
                 <td data-testid={`parent-td-id-${props.data.id}`}>{parentName}</td>
                 <td>
-                    <button type="button" className="btn btn-outline-secondary" onClick={deleteCategory}>
+                    <button type="button" className="btn btn-outline-secondary" onClick={deleteCategory} data-testid={`deleteButton-id-${props.data.id}`}>
                         Delete
                     </button>
                 </td>

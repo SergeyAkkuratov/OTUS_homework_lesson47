@@ -88,7 +88,7 @@ export default function Statistic() {
 
     return (
         <>
-            <fieldset>
+            <fieldset data-testid="stat-form">
                 <div className="form-check form-switch">
                     <input
                         className="form-check-input"

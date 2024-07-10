@@ -47,7 +47,13 @@ export default function AddCategories() {
                         <label htmlFor="parent" className="form-label mt-1">
                             Parent
                         </label>
-                        <select className="form-select" id="parent" value={formData.parent ?? "No parent"} onChange={handleChange} data-testid="selectParent">
+                        <select
+                            className="form-select"
+                            id="parent"
+                            value={formData.parent ?? "No parent"}
+                            onChange={handleChange}
+                            data-testid="selectParent"
+                        >
                             <option key={"no_parent"}>No parent</option>
                             {categories.map((category) => (
                                 <option key={category.id} value={category.id}>

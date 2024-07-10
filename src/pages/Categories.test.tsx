@@ -10,7 +10,6 @@ import { initialCategories, initialOutlaysState, RootState } from "../store/Stor
 import { AuthStatus } from "../store/StoreTypes";
 import Categories from "./Categories";
 
-
 jest.mock("firebase/database");
 
 describe("Categories", () => {
@@ -26,10 +25,10 @@ describe("Categories", () => {
     const mockStore = configureStore<RootState>();
     let store;
 
-    it("should add new outlay on submit", async () => {
-        const myChildData = ({
+    it("should add new categories on submit", async () => {
+        const myChildData = {
             key: "test_key",
-        } as unknown) as ThenableReference;
+        } as unknown as ThenableReference;
 
         (push as jest.MockedFunction<typeof push>).mockReturnValue(myChildData);
         (set as jest.MockedFunction<typeof set>).mockReturnValue(Promise.resolve());
@@ -44,7 +43,7 @@ describe("Categories", () => {
 
         const inputName = screen.getByTestId("inputName") as HTMLInputElement;
         await userEvent.type(inputName, "TEST");
-        
+
         const selectParent = screen.getByTestId("selectParent") as HTMLSelectElement;
         await userEvent.selectOptions(selectParent, "Food");
 

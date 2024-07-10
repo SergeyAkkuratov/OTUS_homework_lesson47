@@ -1,7 +1,6 @@
 import { child, DatabaseReference, DataSnapshot, push, set, ThenableReference } from "firebase/database";
-import { categoriesDbReference, categoriesSlice, initialUserState, outlaysSlice, setCategories, setOutlays, store, userSlice } from "./Store"
+import { categoriesDbReference, categoriesSlice, initialUserState, outlaysSlice, setCategories, setOutlays, store, userSlice } from "./Store";
 import { AuthStatus, Categories, Outlays, OutlayType, UserState } from "./StoreTypes";
-
 
 jest.mock("firebase/database");
 
@@ -31,13 +30,13 @@ describe("Store", () => {
             category: "2",
             comment: "Test comment 3",
         },
-    }
+    };
 
     const user: UserState = {
         status: AuthStatus.DONE,
         email: "test@test.com",
-        uid: "test_uid"
-    }
+        uid: "test_uid",
+    };
 
     const categories: Categories = {
         0: {
@@ -50,7 +49,7 @@ describe("Store", () => {
             name: "TEST2",
             parent: "0",
         },
-    }
+    };
     it("test user actions", () => {
         store.dispatch(userSlice.actions.startAuth());
 
@@ -67,17 +66,17 @@ describe("Store", () => {
         store.dispatch(userSlice.actions.signOut());
 
         expect(store.getState().User).toStrictEqual(initialUserState);
-    })
+    });
 
     it("test outlaySet action", () => {
-        store.dispatch(outlaysSlice.actions.outlaySet(outlays))
+        store.dispatch(outlaysSlice.actions.outlaySet(outlays));
 
         expect(store.getState().Outlays.outlays).toBe(outlays);
 
-        store.dispatch(outlaysSlice.actions.outlaySet({}))
+        store.dispatch(outlaysSlice.actions.outlaySet({}));
 
         expect(store.getState().Outlays.outlays).toStrictEqual({});
-    })
+    });
 
     it("test categories actions", () => {
         store.dispatch(categoriesSlice.actions.setCategories(categories));
@@ -85,20 +84,20 @@ describe("Store", () => {
         expect(store.getState().Categories.categories).toBe(categories);
         expect(categoriesSlice.selectors.categoryNameWithId(store.getState(), "1")).toBe(categories["1"].name);
         expect(categoriesSlice.selectors.highestCategoryName(store.getState(), "1")).toBe(categories["0"].name);
-    })
+    });
 
     it("test onValue callback function for outlays db", async () => {
-        const myChildData = ({
+        const myChildData = {
             key: "test_key",
-        } as unknown) as ThenableReference;
+        } as unknown as ThenableReference;
 
-        const myDbRef = ({
+        const myDbRef = {
             key: "child_test_key",
-        } as unknown) as DatabaseReference;
+        } as unknown as DatabaseReference;
 
-        let snapshot = ({
-            val: () => null
-        } as unknown) as DataSnapshot;
+        let snapshot = {
+            val: () => null,
+        } as unknown as DataSnapshot;
 
         (push as jest.MockedFunction<typeof push>).mockReturnValue(myChildData);
 
@@ -106,7 +105,7 @@ describe("Store", () => {
         expect(push).toHaveBeenCalled();
         expect(store.getState().Outlays.outlays).toStrictEqual({});
 
-        snapshot = ({
+        snapshot = {
             val: () => ({
                 "1": {
                     id: "1",
@@ -115,9 +114,9 @@ describe("Store", () => {
                     sum: 299,
                     category: "0",
                     comment: "Test comment 1",
-                }
-            })
-        } as unknown) as DataSnapshot;
+                },
+            }),
+        } as unknown as DataSnapshot;
 
         setOutlays(myDbRef, snapshot);
         expect(store.getState().Outlays.outlays).toStrictEqual({
@@ -128,33 +127,33 @@ describe("Store", () => {
                 sum: 299,
                 category: "0",
                 comment: "Test comment 1",
-            }
+            },
         });
-    })
+    });
 
     it("test onValue callback function for categories db", async () => {
-        const myDbRef = ({
+        const myDbRef = {
             key: "child_test_key",
-        } as unknown) as DatabaseReference;
+        } as unknown as DatabaseReference;
 
-        let snapshot = ({
-            val: () => null
-        } as unknown) as DataSnapshot;
+        let snapshot = {
+            val: () => null,
+        } as unknown as DataSnapshot;
 
         (set as jest.MockedFunction<typeof set>).mockReturnValue(Promise.resolve());
 
         setCategories(myDbRef, snapshot);
         expect(set).toHaveBeenCalled();
 
-        snapshot = ({
+        snapshot = {
             val: () => ({
                 0: {
                     id: "0",
                     name: "TEST1",
                     parent: null,
-                }
-            })
-        } as unknown) as DataSnapshot;
+                },
+            }),
+        } as unknown as DataSnapshot;
 
         setCategories(myDbRef, snapshot);
         expect(store.getState().Categories.categories).toStrictEqual({
@@ -162,14 +161,14 @@ describe("Store", () => {
                 id: "0",
                 name: "TEST1",
                 parent: null,
-            }
+            },
         });
-    })
+    });
 
     it("test get dbReference", () => {
-        const myDbRef = ({
+        const myDbRef = {
             key: "test_key",
-        } as unknown) as DatabaseReference;
+        } as unknown as DatabaseReference;
         (child as jest.MockedFunction<typeof child>).mockReturnValue(myDbRef);
 
         let received = categoriesDbReference(store.getState());
@@ -179,5 +178,5 @@ describe("Store", () => {
         store.dispatch(userSlice.actions.successAuth(user));
         received = categoriesDbReference(store.getState());
         expect(received?.key).toBe("test_key");
-    })
-})
+    });
+});

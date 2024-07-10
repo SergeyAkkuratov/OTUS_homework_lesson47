@@ -47,8 +47,7 @@ export default function Statistic() {
         });
     };
 
-    const handleRadioButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
+    const handleRadioButtonClick = (value: string) => {
         switch (value) {
             case "LastWeek": {
                 setSearchParams((params) => {
@@ -96,6 +95,7 @@ export default function Statistic() {
                         id="isChart"
                         checked={searchParams.get("isChart") === "true"}
                         onChange={handleChangeChart}
+                        data-testid="isChartInput"
                     />
                     <label className="form-check-label" htmlFor="isChart">
                         Show data as PieChart
@@ -113,7 +113,8 @@ export default function Statistic() {
                                 autoComplete="off"
                                 value={filter}
                                 checked={searchParams.has("filter", filter)}
-                                onChange={handleRadioButtonChange}
+                                onClick={() => handleRadioButtonClick(filter)}
+                                data-testid={`button-radio-${filter}`}
                             />
                             <label key={`label-${index}`} className="btn btn-outline-primary" htmlFor={`filterRadio${index}`}>
                                 {filter}
@@ -133,6 +134,7 @@ export default function Statistic() {
                                 id="startDate"
                                 value={searchParams.get("startDate")!}
                                 onChange={handleChangeDates}
+                                data-testid="startDateInput"
                             />
                         </div>
                         <div>
@@ -145,6 +147,7 @@ export default function Statistic() {
                                 id="endDate"
                                 value={searchParams.get("endDate")!}
                                 onChange={handleChangeDates}
+                                data-testid="endDateInput"
                             />
                         </div>
                     </>
@@ -153,7 +156,7 @@ export default function Statistic() {
                 )}
             </fieldset>
             {searchParams.get("isChart") === "true" ? (
-                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} />
+                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} options={{ title: "Pie Chart" }} />
             ) : (
                 <OutlayTable startDate={searchParams.get("startDate")!} endDate={searchParams.get("endDate")!} />
             )}

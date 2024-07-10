@@ -85,7 +85,12 @@ export default function SingIn() {
                     <button type="submit" className="btn btn-primary mt-2 me-sm-2" data-testid="buttonSubmit">
                         Sign in
                     </button>
-                    <button type="button" className="btn btn-secondary mt-2" onClick={() => signInOrUp(createUserWithEmailAndPassword)}>
+                    <button
+                        type="button"
+                        className="btn btn-secondary mt-2"
+                        onClick={() => signInOrUp(createUserWithEmailAndPassword)}
+                        data-testid="buttonSignUp"
+                    >
                         Sign up
                     </button>
                 </fieldset>

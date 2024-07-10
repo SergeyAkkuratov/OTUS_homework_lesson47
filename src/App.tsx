@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { onUserConnect, useAppSelector,  userSlice } from "./store/Store";
+import { onUserConnect, useAppSelector, userSlice } from "./store/Store";
 import "bootswatch/dist/darkly/bootstrap.min.css";
 
 const Main = React.lazy(() => import("./pages/Main"));

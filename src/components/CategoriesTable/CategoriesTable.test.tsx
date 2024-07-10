@@ -63,7 +63,7 @@ describe("CategoriesTable", () => {
                         name: "TEST2",
                         parent: "0",
                     },
-                }
+                },
             },
         });
 

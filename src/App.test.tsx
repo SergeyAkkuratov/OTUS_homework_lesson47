@@ -9,7 +9,6 @@ import { initialCategories, initialOutlaysState, RootState } from "./store/Store
 import { AuthStatus, CategoriesState, OutlaysState, UserState } from "./store/StoreTypes";
 import App from "./App";
 
-
 describe("App", () => {
     const initialState: RootState = {
         User: {
@@ -64,16 +63,15 @@ describe("App", () => {
         const linkList = screen.getByTestId("linkList");
         expect(linkList.children.length).toBe(5);
 
-
         await userEvent.click(screen.getByTestId("linkAbout"));
         expect(screen.getByTestId("about-message")).toBeInTheDocument();
-        
+
         await userEvent.click(screen.getByTestId("linkCategories"));
         expect(screen.getByTestId("cat-table")).toBeInTheDocument();
-        
+
         await userEvent.click(screen.getByTestId("linkStatistic"));
         expect(screen.getByTestId("stat-form")).toBeInTheDocument();
-        
+
         await userEvent.click(screen.getByTestId("linkUser"));
         expect(screen.getByTestId("user-label")).toBeInTheDocument();
     });

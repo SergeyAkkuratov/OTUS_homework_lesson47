@@ -71,7 +71,7 @@ export const userSlice = createSlice({
         }),
     },
     selectors: {
-        isAuth: (state) => state.status === AuthStatus.DONE
+        isAuth: (state) => state.status === AuthStatus.DONE,
     },
 });
 

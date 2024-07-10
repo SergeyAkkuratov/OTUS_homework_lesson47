@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 import { useAppDispatch, useAppSelector, userSlice } from "../store/Store";
 import { firebaseAuth } from "../App";
 
@@ -14,12 +13,10 @@ export default function User() {
         try {
             await signOut(firebaseAuth);
             dispatch(userSlice.actions.signOut());
-            navigate(`${PREFIX}/`);
+            navigate("/");
         } catch (error) {
-            if (error instanceof FirebaseError) {
-                // eslint-disable-next-line no-console
-                console.error(`Sign out error: ${error}`);
-            }
+            // eslint-disable-next-line no-console
+            console.error(`Sign out error: ${error}`);
         }
     }
 
@@ -34,7 +31,7 @@ export default function User() {
                     <input type="text" readOnly={true} className="form-control-plaintext" id="staticEmail" value={userState.email!} />
                 </div>
             </div>
-            <button type="button" className="btn btn-danger mt-4" onClick={signOutApi}>
+            <button type="button" className="btn btn-danger mt-4" onClick={signOutApi} data-testid="signOutButton">
                 Sign out
             </button>
         </>

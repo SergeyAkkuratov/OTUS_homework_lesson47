@@ -10,7 +10,7 @@ const root = createRoot(document.getElementById("app")!);
 root.render(
     <>
         <Provider store={store}>
-            <BrowserRouter>
+            <BrowserRouter basename={PREFIX}>
                 <App />
             </BrowserRouter>
         </Provider>

@@ -9,7 +9,7 @@ export default function Header() {
         <>
             <nav className="navbar navbar-expand-sm bg-dark" data-bs-theme="dark" data-testid="header">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href={`${PREFIX}/`}>
+                    <a className="navbar-brand" href="/">
                         Outlays
                     </a>
                     <button
@@ -26,29 +26,29 @@ export default function Header() {
                     <div className="collapse navbar-collapse" id="navbar">
                         <ul className="navbar-nav me-auto" data-testid="linkList">
                             <li className="nav-item">
-                                <Link className="nav-link" to={`${PREFIX}/`}>
+                                <Link className="nav-link" to="/">
                                     Main
                                 </Link>
                             </li>
                             {isAuth ? (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/categories`} data-testid="linkCategories">
+                                        <Link className="nav-link" to="/categories" data-testid="linkCategories">
                                             Categories
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/statistic`} data-testid="linkStatistic">
+                                        <Link className="nav-link" to="/statistic" data-testid="linkStatistic">
                                             Statistic
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/about`} data-testid="linkAbout">
+                                        <Link className="nav-link" to="/about" data-testid="linkAbout">
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/user`} data-testid="linkUser">
+                                        <Link className="nav-link" to="/user" data-testid="linkUser">
                                             <span className="badge bg-success">{userEmail}</span>
                                         </Link>
                                     </li>
@@ -56,12 +56,12 @@ export default function Header() {
                             ) : (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/about`} data-testid="linkAbout">
+                                        <Link className="nav-link" to="/about" data-testid="linkAbout">
                                             About
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`${PREFIX}/signin`} data-testid="linkSignin">
+                                        <Link className="nav-link" to="/signin" data-testid="linkSignin">
                                             SignIn
                                         </Link>
                                     </li>

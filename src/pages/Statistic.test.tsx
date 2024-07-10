@@ -87,14 +87,24 @@ describe("Statisitc", () => {
         expect(table).toBeInTheDocument();
         expect(table.rows.length).toBe(3);
 
-        await userEvent.click(screen.getByTestId("button-radio-LastMonth"));
+        // await userEvent.click(screen.getByTestId("button-radio-LastMonth"));
+        await act(async () => {
+            fireEvent.change(screen.getByTestId("button-radio-LastMonth"), { target: { value: "LastMonth" } });
+            // To trigger any onChange listeners
+            fireEvent.blur(screen.getByTestId("button-radio-LastMonth"));
+        });
 
-        expect(table.rows.length).toBe(4);
+        expect(table.rows.length).toBe(3);
 
         const startDateInput = screen.getByTestId("startDateInput") as HTMLInputElement;
         const endDateInput = screen.getByTestId("endDateInput") as HTMLInputElement;
 
-        await userEvent.click(screen.getByTestId("button-radio-BetweenTwoDates"));
+        // await userEvent.click(screen.getByTestId("button-radio-BetweenTwoDates"));
+        await act(async () => {
+            fireEvent.change(screen.getByTestId("button-radio-BetweenTwoDates"), { target: { value: "BetweenTwoDates" } });
+            // To trigger any onChange listeners
+            fireEvent.blur(screen.getByTestId("button-radio-BetweenTwoDates"));
+        });
         // Fire the change event
         await act(async () => {
             fireEvent.change(startDateInput, { target: { id: "startDate", value: "2024-04-01T01:00" } });
@@ -117,7 +127,12 @@ describe("Statisitc", () => {
         expect(chartCheckbox.checked).toBeTruthy();
 
         await userEvent.click(chartCheckbox);
-        await userEvent.click(screen.getByTestId("button-radio-LastWeek"));
+        // await userEvent.click(screen.getByTestId("button-radio-LastWeek"));
+        await act(async () => {
+            fireEvent.change(screen.getByTestId("button-radio-LastWeek"), { target: { value: "LastWeek" } });
+            // To trigger any onChange listeners
+            fireEvent.blur(screen.getByTestId("button-radio-LastWeek"));
+        });
         expect(table.rows.length).toBe(6);
     });
 

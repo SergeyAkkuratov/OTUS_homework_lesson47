@@ -47,7 +47,8 @@ export default function Statistic() {
         });
     };
 
-    const handleRadioButtonClick = (value: string) => {
+    const handleRadioButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
         switch (value) {
             case "LastWeek": {
                 setSearchParams((params) => {
@@ -113,7 +114,7 @@ export default function Statistic() {
                                 autoComplete="off"
                                 value={filter}
                                 checked={searchParams.has("filter", filter)}
-                                onClick={() => handleRadioButtonClick(filter)}
+                                onChange={handleRadioButtonChange}
                                 data-testid={`button-radio-${filter}`}
                             />
                             <label key={`label-${index}`} className="btn btn-outline-primary" htmlFor={`filterRadio${index}`}>
@@ -156,7 +157,7 @@ export default function Statistic() {
                 )}
             </fieldset>
             {searchParams.get("isChart") === "true" ? (
-                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} options={{ title: "Pie Chart" }} />
+                <Chart chartType="PieChart" data={getData()} width={"100%"} height={"400px"} options={{title:"Pie Chart"}}/>
             ) : (
                 <OutlayTable startDate={searchParams.get("startDate")!} endDate={searchParams.get("endDate")!} />
             )}

@@ -96,7 +96,7 @@ describe("App", () => {
                 </Provider>
             );
         });
-
+        await screen.findByTestId("outlayTable");
         await userEvent.click(screen.getByTestId("linkStatistic"));
         expect(screen.getByTestId("statisticForm")).toBeInTheDocument();
     });

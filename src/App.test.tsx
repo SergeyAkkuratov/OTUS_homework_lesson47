@@ -62,6 +62,7 @@ describe("App", () => {
 
         const linkList = screen.getByTestId("linkList");
         expect(linkList.children.length).toBe(5);
+        await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkAbout"));
         expect(screen.getByTestId("about-message")).toBeInTheDocument();
@@ -79,6 +80,7 @@ describe("App", () => {
                 </Provider>
             );
         });
+        await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkCategories"));
         expect(screen.getByTestId("cat-table")).toBeInTheDocument();
@@ -97,6 +99,7 @@ describe("App", () => {
             );
         });
         await screen.findByTestId("outlayTable");
+
         await userEvent.click(screen.getByTestId("linkStatistic"));
         expect(screen.getByTestId("statisticForm")).toBeInTheDocument();
     });
@@ -113,6 +116,7 @@ describe("App", () => {
                 </Provider>
             );
         });
+        await screen.findByTestId("outlayTable");
 
         await userEvent.click(screen.getByTestId("linkUser"));
         expect(screen.getByTestId("user-label")).toBeInTheDocument();

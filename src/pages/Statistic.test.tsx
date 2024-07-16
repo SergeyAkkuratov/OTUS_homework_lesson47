@@ -7,13 +7,38 @@ import userEvent from "@testing-library/user-event";
 import { outlaysSlice, store } from "../store/Store";
 import Statistic from "./Statistic";
 import { OutlayType } from "../store/StoreTypes";
+import formatDate from "../helpers";
 
 describe("Statisitc", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dates: any = {};
+    const today = new Date();
+    dates.today = formatDate(today);
+
+    today.setMonth(today.getMonth() - 1);
+    dates.lastMonth = formatDate(today);
+
+    today.setMonth(today.getMonth() + 1);
+    today.setDate(today.getDate() - 2);
+    dates["-2 days"] = formatDate(today);
+
+    today.setDate(today.getDate() - 5);
+    dates.lastWeek = formatDate(today);
+
+    today.setDate(today.getDate() - 13);
+    dates["-20 days"] = formatDate(today);
+
+    today.setDate(today.getDate() - 15);
+    dates["-35 days"] = formatDate(today);
+
+    today.setDate(today.getDate() - 20);
+    dates["-55 days"] = formatDate(today);
+
     const outlays = {
         "1": {
             id: "1",
             type: OutlayType.OUTLAY,
-            date: "2024-07-06T01:00",
+            date: dates.today,
             sum: 299,
             category: "0",
             comment: "today",
@@ -21,7 +46,7 @@ describe("Statisitc", () => {
         "2": {
             id: "2",
             type: OutlayType.OUTLAY,
-            date: "2024-07-04T01:00",
+            date: dates["-2 days"],
             sum: 299,
             category: "1",
             comment: "-2 days",
@@ -29,7 +54,7 @@ describe("Statisitc", () => {
         "3": {
             id: "3",
             type: OutlayType.OUTLAY,
-            date: "2024-06-14T01:00",
+            date: dates["-20 days"],
             sum: 299,
             category: "2",
             comment: "-20 days",
@@ -37,7 +62,7 @@ describe("Statisitc", () => {
         "4": {
             id: "3",
             type: OutlayType.OUTLAY,
-            date: "2024-05-01T01:00",
+            date: dates["-35 days"],
             sum: 299,
             category: "2",
             comment: "older",
@@ -45,7 +70,7 @@ describe("Statisitc", () => {
         "5": {
             id: "3",
             type: OutlayType.INCOME,
-            date: "2024-05-01T01:00",
+            date: dates["-55 days"],
             sum: 299,
             category: "2",
             comment: "older",
@@ -90,8 +115,6 @@ describe("Statisitc", () => {
         // await userEvent.click(screen.getByTestId("button-radio-LastMonth"));
         await act(async () => {
             fireEvent.change(screen.getByTestId("button-radio-LastMonth"), { target: { value: "LastMonth" } });
-            // To trigger any onChange listeners
-            fireEvent.blur(screen.getByTestId("button-radio-LastMonth"));
         });
 
         expect(table.rows.length).toBe(3);
@@ -99,25 +122,14 @@ describe("Statisitc", () => {
         const startDateInput = screen.getByTestId("startDateInput") as HTMLInputElement;
         const endDateInput = screen.getByTestId("endDateInput") as HTMLInputElement;
 
-        // await userEvent.click(screen.getByTestId("button-radio-BetweenTwoDates"));
         await act(async () => {
             fireEvent.change(screen.getByTestId("button-radio-BetweenTwoDates"), { target: { value: "BetweenTwoDates" } });
-            // To trigger any onChange listeners
-            fireEvent.blur(screen.getByTestId("button-radio-BetweenTwoDates"));
-        });
-        // Fire the change event
-        await act(async () => {
-            fireEvent.change(startDateInput, { target: { id: "startDate", value: "2024-04-01T01:00" } });
-            // To trigger any onChange listeners
-            fireEvent.blur(startDateInput);
-
-            fireEvent.change(endDateInput, { target: { id: "endDate", value: "2024-07-10T23:59" } });
-            // To trigger any onChange listeners
-            fireEvent.blur(endDateInput);
+            fireEvent.change(startDateInput, { target: { id: "startDate", value: dates["-2 days"] } });
+            fireEvent.change(endDateInput, { target: { id: "endDate", value: dates.today } });
         });
 
-        expect(startDateInput.value).toBe("2024-04-01T01:00");
-        expect(table.rows.length).toBe(6);
+        expect(startDateInput.value).toBe(dates["-2 days"]);
+        expect(table.rows.length).toBe(3);
 
         const chartCheckbox = screen.getByTestId("isChartInput") as HTMLInputElement;
         expect(chartCheckbox.checked).not.toBeTruthy();
@@ -133,11 +145,13 @@ describe("Statisitc", () => {
             // To trigger any onChange listeners
             fireEvent.blur(screen.getByTestId("button-radio-LastWeek"));
         });
-        expect(table.rows.length).toBe(6);
+        expect(table.rows.length).toBe(3);
     });
 
     it("test lastWeek search params", () => {
-        mockSearchParams(`?filter=LastWeek&startDate=2024-07-03T23%3A33&endDate=2024-07-10T23%3A33&isChart=false`);
+        const startDate = (dates.lastWeek as string).replace(":", "%3A");
+        const endDate = (dates.today as string).replace(":", "%3A");
+        mockSearchParams(`?filter=LastWeek&startDate=${startDate}&endDate=${endDate}&isChart=false`);
         store.dispatch(outlaysSlice.actions.outlaySet(outlays));
         render(
             <Provider store={store}>
@@ -153,7 +167,9 @@ describe("Statisitc", () => {
     });
 
     it("test LastMonth search params", () => {
-        mockSearchParams(`?filter=LastMonth&startDate=2024-06-10T23%3A33&endDate=2024-07-10T23%3A33&isChart=false`);
+        const startDate = (dates.lastMonth as string).replace(":", "%3A");
+        const endDate = (dates.today as string).replace(":", "%3A");
+        mockSearchParams(`?filter=LastMonth&startDate=${startDate}%3A33&endDate=${endDate}&isChart=false`);
         store.dispatch(outlaysSlice.actions.outlaySet(outlays));
         render(
             <Provider store={store}>
@@ -169,7 +185,9 @@ describe("Statisitc", () => {
     });
 
     it("test BetweenTwoDates serch params", () => {
-        mockSearchParams(`?filter=BetweenTwoDates&startDate=2024-04-01T23%3A33&endDate=2024-07-10T23%3A33&isChart=false`);
+        const startDate = (dates["-55 days"] as string).replace(":", "%3A");
+        const endDate = (dates.today as string).replace(":", "%3A");
+        mockSearchParams(`?filter=BetweenTwoDates&startDate=${startDate}&endDate=${endDate}&isChart=false`);
         store.dispatch(outlaysSlice.actions.outlaySet(outlays));
         render(
             <Provider store={store}>
